@@ -1,21 +1,43 @@
 package chess.domain.board;
 
-public class Turn {
-    private TurnStatus turnStatus;
+import chess.domain.piece.Piece;
 
-    public Turn() {
-        this.turnStatus = TurnStatus.BLACK;
+public enum Turn {
+    WHITE,
+    BLACK,
+    FINISH;
+
+    private static final IllegalArgumentException NOT_TURN_EXCEPTION = new IllegalArgumentException(
+            "해당 행동을 수행할 수 있는 순서가 아닙니다.");
+
+    public Turn next() {
+        validateTurn();
+        if (this.equals(BLACK)) {
+            return WHITE;
+        }
+        return BLACK;
     }
 
-    public void proceedNext() {
-        turnStatus = turnStatus.next();
+    public Turn stop() {
+        validateTurn();
+        return FINISH;
     }
 
-    public void stop() {
-        turnStatus = turnStatus.stop();
+    public boolean isMatchPiece(Piece piece) {
+        validateTurn();
+        if (this.equals(BLACK)) {
+            return piece.isBlack();
+        }
+        return !piece.isBlack();
     }
 
     public boolean isFinish() {
-        return turnStatus.isFinish();
+        return this.equals(FINISH);
+    }
+
+    private void validateTurn() {
+        if (isFinish()) {
+            throw NOT_TURN_EXCEPTION;
+        }
     }
 }
