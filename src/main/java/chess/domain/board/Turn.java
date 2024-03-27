@@ -5,10 +5,11 @@ import chess.domain.piece.Piece;
 public enum Turn {
     WHITE,
     BLACK,
-    FINISH;
+    FINISH_WHITE_WIN,
+    FINISH_BLACK_WIN;
 
-    private static final IllegalArgumentException NOT_TURN_EXCEPTION = new IllegalArgumentException(
-            "해당 행동을 수행할 수 있는 순서가 아닙니다.");
+    private static final IllegalArgumentException NOT_TURN_EXCEPTION =
+            new IllegalArgumentException("해당 행동을 수행할 수 있는 순서가 아닙니다.");
 
     public Turn next() {
         validateTurn();
@@ -18,9 +19,12 @@ public enum Turn {
         return BLACK;
     }
 
-    public Turn stop() {
+    public Turn stopByCatchKing(Piece piece) {
         validateTurn();
-        return FINISH;
+        if (piece.isBlack()) {
+            return FINISH_WHITE_WIN;
+        }
+        return FINISH_BLACK_WIN;
     }
 
     public boolean isMatchPiece(Piece piece) {
@@ -32,7 +36,7 @@ public enum Turn {
     }
 
     public boolean isFinish() {
-        return this.equals(FINISH);
+        return this.equals(FINISH_WHITE_WIN) || this.equals(FINISH_BLACK_WIN);
     }
 
     private void validateTurn() {

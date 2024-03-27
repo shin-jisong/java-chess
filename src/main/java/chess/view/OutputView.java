@@ -1,5 +1,6 @@
 package chess.view;
 
+import chess.domain.board.Turn;
 import chess.domain.location.Column;
 import chess.domain.location.Location;
 import chess.domain.location.Row;
@@ -15,6 +16,7 @@ public class OutputView {
     public void printGameStart() {
         System.out.println("> 체스 게임을 시작합니다.");
         System.out.println("> 게임 시작 : " + InputView.START);
+        System.out.println("> 게임 현황 : " + InputView.STATUS);
         System.out.println("> 게임 종료 : " + InputView.END);
         System.out.println("> 게임 이동 : " + InputView.MOVE + " source위치 target위치 - 예. " + InputView.MOVE + " b2 b3");
     }
@@ -35,11 +37,23 @@ public class OutputView {
                 .forEach(System.out::print);
     }
 
-    public static void printStatus(double blackScore, double whiteScore) {
+    public void printStatus(double blackScore, double whiteScore) {
         System.out.println("현재 각 진영의 점수입니다.");
         System.out.println("흑팀: " + blackScore);
         System.out.println("백팀: " + whiteScore);
-        System.out.println();
+        printOutcome(blackScore, whiteScore);
+    }
+
+    private void printOutcome(double blackScore, double whiteScore) {
+        if (blackScore > whiteScore) {
+            System.out.println("현재 흑팀이 이기고 있습니다.");
+            return;
+        }
+        if (whiteScore > blackScore) {
+            System.out.println("현재 백팀이 이기고 있습니다.");
+            return;
+        }
+        System.out.println("현재 흑팀과 백팀이 비기고 있습니다.");
     }
 
     private String convertPieceToString(Piece piece) {
@@ -81,7 +95,13 @@ public class OutputView {
         System.out.println(exception.getMessage());
     }
 
-    public void printFinish() {
-        System.out.println("게임이 종료되었습니다.");
+    public void printFinish(Turn turn) {
+        if (turn.equals(Turn.FINISH_BLACK_WIN)) {
+            System.out.println("흑팀의 승리로 게임이 종료되었습니다.");
+        }
+        if (turn.equals(Turn.FINISH_WHITE_WIN)) {
+            System.out.println("백팀의 승리로 게임이 종료되었습니다.");
+        }
+
     }
 }

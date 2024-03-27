@@ -8,6 +8,7 @@ import chess.view.OutputView;
 public class GameController {
     private static final InputView inputView = new InputView();
     private static final OutputView outputView = new OutputView();
+    public static final String INIT_COMMAND = "";
 
     private Board board = null;
 
@@ -26,12 +27,14 @@ public class GameController {
     }
 
     private void play() {
-        String command = inputView.readCommand();
+        String command = INIT_COMMAND;
         while (!InputView.END.equalsIgnoreCase(command) && !checkBoardFinish()) {
-            playTurn(command);
             command = inputView.readCommand();
+            playTurn(command);
         }
-        outputView.printFinish();
+        if (board.isFinish()) {
+            outputView.printFinish(board.getTurn());
+        }
     }
 
     private boolean checkBoardFinish() {
@@ -51,9 +54,10 @@ public class GameController {
     }
 
     private void checkStatus() {
+        checkBoard();
         double blackScore = board.calculateBlackScore();
         double whiteScore = board.calculateWhiteScore();
-        OutputView.printStatus(blackScore, whiteScore);
+        outputView.printStatus(blackScore, whiteScore);
     }
 
     private void createBoard() {

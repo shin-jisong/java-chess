@@ -15,13 +15,10 @@ import chess.domain.piece.Rook;
 import chess.domain.piece.WhitePawn;
 import chess.view.MoveCommand;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 public class Board {
     private final Map<Location, Piece> board;
@@ -94,7 +91,7 @@ public class Board {
 
     private void checkTurn(Piece targetPiece) {
         if (targetPiece != null && targetPiece.equalPieceType(PieceType.KING)) {
-            turn = turn.stop();
+            turn = turn.stopByCatchKing(targetPiece);
             return;
         }
         turn = turn.next();
@@ -136,7 +133,7 @@ public class Board {
     private int countSameColumnPawn(Color color) {
         Map<Column, Integer> columnCount = new HashMap<>();
         board.entrySet().stream()
-                .filter(entry -> isPieceColorMatching(color, entry.getValue()))
+                .filter(entry -> entry.getValue().equalPieceType(PieceType.PAWN) && isPieceColorMatching(color, entry.getValue()))
                 .map(Map.Entry::getKey)
                 .forEach(location -> countPawnColumn(location, columnCount));
         return columnCount.values().stream()
@@ -198,5 +195,9 @@ public class Board {
 
     public Map<Location, Piece> getBoard() {
         return Collections.unmodifiableMap(board);
+    }
+
+    public Turn getTurn() {
+        return turn;
     }
 }
