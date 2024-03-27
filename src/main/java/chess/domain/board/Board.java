@@ -15,10 +15,13 @@ import chess.domain.piece.Rook;
 import chess.domain.piece.WhitePawn;
 import chess.view.MoveCommand;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class Board {
     private final Map<Location, Piece> board;
@@ -117,6 +120,40 @@ public class Board {
         board.remove(moveCommand.getSource());
         board.put(moveCommand.getTarget(), movingPiece);
     }
+
+    public double calculateBlackScore() {
+        List<Piece> pieces = board.values().stream().toList();
+        int deductionPawnCount = countSameColumnPawn(Color.BLACK);
+        return Score.calculateBlack(pieces, deductionPawnCount);
+    }
+
+    public double calculateWhiteScore() {
+        List<Piece> pieces = board.values().stream().toList();
+        int deductionPawnCount = countSameColumnPawn(Color.WHITE);
+        return Score.calculateWhite(pieces, deductionPawnCount);
+    }
+
+    private int countSameColumnPawn(Color color) {
+        Map<Column, Integer> columnCount = new HashMap<>();
+        board.entrySet().stream()
+                .filter(entry -> isPieceColorMatching(color, entry.getValue()))
+                .map(Map.Entry::getKey)
+                .forEach(location -> countPawnColumn(location, columnCount));
+        return columnCount.values().stream()
+                .filter(integer -> integer > 1)
+                .mapToInt(i -> i)
+                .sum();
+    }
+
+    private static void countPawnColumn(Location location, Map<Column, Integer> columnCount) {
+        Column column = location.getColumn();
+        columnCount.put(column, columnCount.getOrDefault(column, 0) + 1);
+    }
+
+    private boolean isPieceColorMatching(Color color, Piece piece) {
+        return color == Color.BLACK && piece.isBlack() || color == Color.WHITE && !piece.isBlack();
+    }
+
 
     private Route createPath(MoveCommand moveCommand) {
         List<Direction> directions = DirectionFinder.find(moveCommand.getSource(), moveCommand.getTarget());
