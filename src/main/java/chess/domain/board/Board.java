@@ -9,6 +9,7 @@ import chess.domain.piece.Color;
 import chess.domain.piece.King;
 import chess.domain.piece.Knight;
 import chess.domain.piece.Piece;
+import chess.domain.piece.PieceType;
 import chess.domain.piece.Queen;
 import chess.domain.piece.Rook;
 import chess.domain.piece.WhitePawn;
@@ -89,7 +90,7 @@ public class Board {
     }
 
     private void checkTurn(Piece targetPiece) {
-        if (targetPiece != null && targetPiece.isKing()) {
+        if (targetPiece != null && targetPiece.equalPieceType(PieceType.KING)) {
             turn = turn.stop();
             return;
         }
