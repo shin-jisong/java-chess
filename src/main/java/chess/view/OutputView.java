@@ -1,5 +1,6 @@
 package chess.view;
 
+import chess.domain.board.GameStatus;
 import chess.domain.board.Turn;
 import chess.domain.location.Column;
 import chess.domain.location.Location;
@@ -95,13 +96,12 @@ public class OutputView {
         System.out.println(exception.getMessage());
     }
 
-    public void printFinish(Turn turn) {
-        if (turn.equals(Turn.FINISH_BLACK_WIN)) {
+    public void printFinish(GameStatus gameStatus) {
+        if (gameStatus.equals(GameStatus.BLACK_WIN)) {
             System.out.println("흑팀의 승리로 게임이 종료되었습니다.");
         }
-        if (turn.equals(Turn.FINISH_WHITE_WIN)) {
+        if (gameStatus.equals(GameStatus.WHITE_WIN)) {
             System.out.println("백팀의 승리로 게임이 종료되었습니다.");
         }
-
     }
 }

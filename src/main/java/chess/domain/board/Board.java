@@ -15,10 +15,13 @@ import chess.domain.piece.Rook;
 import chess.domain.piece.WhitePawn;
 import chess.view.MoveCommand;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class Board {
     private final Map<Location, Piece> board;
@@ -33,6 +36,7 @@ public class Board {
         return turn.isFinish();
     }
 
+
     private Map<Location, Piece> initialBoard() {
         Map<Location, Piece> initialBoard = new HashMap<>();
         initialPawnSetting(initialBoard);
@@ -44,7 +48,7 @@ public class Board {
         return initialBoard;
     }
 
-    private static void validatePiece(Piece piece) {
+    private void validatePiece(Piece piece) {
         if (piece == null) {
             throw new IllegalArgumentException("말이 존재하지 않습니다.");
         }
@@ -81,20 +85,24 @@ public class Board {
         board.put(new Location(Column.E, Row.EIGHT), new King(Color.BLACK));
     }
 
-    public void proceedTurn(MoveCommand moveCommand) {
+    public GameStatus proceedTurn(MoveCommand moveCommand) {
         Piece sourcePiece = findPieceAt(moveCommand.getSource());
         Piece targetPiece = board.get(moveCommand.getTarget());
         validateMatchPiece(sourcePiece);
         tryMove(moveCommand, sourcePiece);
-        checkTurn(targetPiece);
+        return checkTurn(targetPiece);
     }
 
-    private void checkTurn(Piece targetPiece) {
+    private GameStatus checkTurn(Piece targetPiece) {
         if (targetPiece != null && targetPiece.equalPieceType(PieceType.KING)) {
-            turn = turn.stopByCatchKing(targetPiece);
-            return;
+            turn = turn.stop();
+            if (targetPiece.isBlack()) {
+                return GameStatus.WHITE_WIN;
+            }
+            return GameStatus.BLACK_WIN;
         }
         turn = turn.next();
+        return GameStatus.IN_PROGRESS;
     }
 
     private void tryMove(MoveCommand moveCommand, Piece sourcePiece) {

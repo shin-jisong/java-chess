@@ -1,6 +1,7 @@
 package chess.controller;
 
 import chess.domain.board.Board;
+import chess.domain.board.GameStatus;
 import chess.view.InputView;
 import chess.view.MoveCommand;
 import chess.view.OutputView;
@@ -28,12 +29,9 @@ public class GameController {
 
     private void play() {
         String command = INIT_COMMAND;
-        while (!InputView.END.equalsIgnoreCase(command) && !checkBoardFinish()) {
+        while (!InputView.END.equalsIgnoreCase(command) || !checkBoardFinish()) {
             command = inputView.readCommand();
             playTurn(command);
-        }
-        if (board.isFinish()) {
-            outputView.printFinish(board.getTurn());
         }
     }
 
@@ -69,8 +67,16 @@ public class GameController {
         checkBoard();
         String[] commands = command.split(InputView.DELIMITER);
         MoveCommand moveCommand = new MoveCommand(commands[1], commands[2]);
-        board.proceedTurn(moveCommand);
+        GameStatus gameStatus = board.proceedTurn(moveCommand);
         outputView.printBoard(board.getBoard());
+        checkFinish(gameStatus);
+    }
+
+    private void checkFinish(GameStatus gameStatus) {
+        if (gameStatus.equals(GameStatus.IN_PROGRESS)) {
+            return;
+        }
+        outputView.printFinish(gameStatus);
     }
 
     private void checkBoard() {

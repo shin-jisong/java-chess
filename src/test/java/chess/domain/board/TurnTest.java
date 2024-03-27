@@ -15,7 +15,6 @@ class TurnTest {
     @DisplayName("다음 턴을 잘 넘긴다.")
     @Nested
     class nextTest {
-        /*
         @DisplayName("지금의 턴이 흑일 때, 백의 턴이 된다.")
         @Test
         void nextWhiteTurnTest() {
@@ -40,13 +39,11 @@ class TurnTest {
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("해당 행동을 수행할 수 있는 순서가 아닙니다.");
         }
-         */
     }
 
     @DisplayName("턴을 멈춘다.")
     @Nested
     class stopTest {
-        /*
         @DisplayName("지금의 턴이 진행 중일 때, 턴을 멈출 수 있다.")
         @ParameterizedTest
         @EnumSource(value = Turn.class, names = {"BLACK", "WHITE"})
@@ -63,7 +60,6 @@ class TurnTest {
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("해당 행동을 수행할 수 있는 순서가 아닙니다.");
         }
-        */
     }
 
     @DisplayName("해당 턴에 맞는 기물인지 확인한다.")
@@ -85,7 +81,7 @@ class TurnTest {
             Assertions.assertThat(turn.isMatchPiece(bishop)).isEqualTo(result);
         }
 
-        /*
+
         @DisplayName("턴을 멈춘 상태라면, 기물을 확인할 수 없다.")
         @Test
         void invalidMatchPieceTest() {
@@ -95,7 +91,6 @@ class TurnTest {
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("해당 행동을 수행할 수 있는 순서가 아닙니다.");
         }
-         */
     }
 
     @DisplayName("턴이 끝났는지 확인한다.")
