@@ -6,6 +6,7 @@ public class InputView {
     public static final String MOVE = "move";
     public static final String START = "start";
     public static final String END = "end";
+    public static final String STATUS = "status";
     public static final String DELIMITER = " ";
 
     private static final Scanner SCANNER = new Scanner(System.in);
@@ -33,6 +34,9 @@ public class InputView {
             return;
         }
         if (command.equalsIgnoreCase(END)) {
+            return;
+        }
+        if (command.equalsIgnoreCase(STATUS)) {
             return;
         }
         throw new IllegalArgumentException("잘못된 입력입니다.");

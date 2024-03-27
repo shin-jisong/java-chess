@@ -43,7 +43,17 @@ public class GameController {
             createBoard();
             return;
         }
+        if (InputView.STATUS.equalsIgnoreCase(command)) {
+            checkStatus();
+            return;
+        }
         move(command);
+    }
+
+    private void checkStatus() {
+        double blackScore = board.calculateBlackScore();
+        double whiteScore = board.calculateWhiteScore();
+        OutputView.printStatus(blackScore, whiteScore);
     }
 
     private void createBoard() {

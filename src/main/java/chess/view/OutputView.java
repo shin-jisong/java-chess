@@ -35,6 +35,13 @@ public class OutputView {
                 .forEach(System.out::print);
     }
 
+    public static void printStatus(double blackScore, double whiteScore) {
+        System.out.println("현재 각 진영의 점수입니다.");
+        System.out.println("흑팀: " + blackScore);
+        System.out.println("백팀: " + whiteScore);
+        System.out.println();
+    }
+
     private String convertPieceToString(Piece piece) {
         if (piece == null) {
             return ONE_SQUARE;
