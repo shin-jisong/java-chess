@@ -21,9 +21,15 @@ import java.util.Map;
 
 public class Board {
     private final Map<Location, Piece> board;
+    private Turn turn;
 
     public Board() {
         this.board = initialBoard();
+        this.turn = Turn.WHITE;
+    }
+
+    public boolean isFinish() {
+        return turn.isFinish();
     }
 
     private Map<Location, Piece> initialBoard() {
@@ -74,14 +80,36 @@ public class Board {
         board.put(new Location(Column.E, Row.EIGHT), new King(Color.BLACK));
     }
 
-    public void tryMove(MoveCommand moveCommand) {
+    public void proceedTurn(MoveCommand moveCommand) {
         Piece sourcePiece = findPieceAt(moveCommand.getSource());
+        Piece targetPiece = board.get(moveCommand.getTarget());
+        validateMatchPiece(sourcePiece);
+        tryMove(moveCommand, sourcePiece);
+        checkTurn(targetPiece);
+    }
+
+    private void checkTurn(Piece targetPiece) {
+        if (targetPiece != null && targetPiece.isKing()) {
+            turn = turn.stop();
+            return;
+        }
+        turn = turn.next();
+    }
+
+    private void tryMove(MoveCommand moveCommand, Piece sourcePiece) {
         Route route = createPath(moveCommand);
         if (sourcePiece.canMove(route)) {
             move(moveCommand, sourcePiece);
             return;
         }
         throw new IllegalArgumentException("유효하지 않은 움직임입니다.");
+    }
+
+    private void validateMatchPiece(Piece sourcePiece) {
+        if (turn.isMatchPiece(sourcePiece)) {
+            return;
+        }
+        throw new IllegalArgumentException("해당 행동을 수행할 수 있는 순서가 아닙니다.");
     }
 
     private void move(MoveCommand moveCommand, Piece movingPiece) {

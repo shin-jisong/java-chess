@@ -73,4 +73,8 @@ public class OutputView {
     public void printException(RuntimeException exception) {
         System.out.println(exception.getMessage());
     }
+
+    public void printFinish() {
+        System.out.println("게임이 종료되었습니다.");
+    }
 }

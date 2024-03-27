@@ -21,6 +21,10 @@ public abstract class Piece {
         return this.color == other.color;
     }
 
+    public boolean isKing() {
+        return this.pieceType == PieceType.KING;
+    }
+
     public PieceType getPieceType() {
         return pieceType;
     }
