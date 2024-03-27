@@ -15,13 +15,10 @@ import chess.domain.piece.Rook;
 import chess.domain.piece.WhitePawn;
 import chess.view.MoveCommand;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 public class Board {
     private final Map<Location, Piece> board;
@@ -30,10 +27,6 @@ public class Board {
     public Board() {
         this.board = initialBoard();
         this.turn = Turn.WHITE;
-    }
-
-    public boolean isFinish() {
-        return turn.isFinish();
     }
 
 
@@ -46,12 +39,6 @@ public class Board {
         initialQueenSetting(initialBoard);
         initialKingSetting(initialBoard);
         return initialBoard;
-    }
-
-    private void validatePiece(Piece piece) {
-        if (piece == null) {
-            throw new IllegalArgumentException("말이 존재하지 않습니다.");
-        }
     }
 
     private void initialPawnSetting(Map<Location, Piece> board) {
@@ -93,13 +80,17 @@ public class Board {
         return checkTurn(targetPiece);
     }
 
+    private static GameStatus checkWinTeam(Piece targetPiece) {
+        if (targetPiece.isBlack()) {
+            return GameStatus.WHITE_WIN;
+        }
+        return GameStatus.BLACK_WIN;
+    }
+
     private GameStatus checkTurn(Piece targetPiece) {
         if (targetPiece != null && targetPiece.equalPieceType(PieceType.KING)) {
             turn = turn.stop();
-            if (targetPiece.isBlack()) {
-                return GameStatus.WHITE_WIN;
-            }
-            return GameStatus.BLACK_WIN;
+            return checkWinTeam(targetPiece);
         }
         turn = turn.next();
         return GameStatus.IN_PROGRESS;
@@ -201,11 +192,17 @@ public class Board {
         return piece;
     }
 
-    public Map<Location, Piece> getBoard() {
-        return Collections.unmodifiableMap(board);
+    private void validatePiece(Piece piece) {
+        if (piece == null) {
+            throw new IllegalArgumentException("말이 존재하지 않습니다.");
+        }
     }
 
-    public Turn getTurn() {
-        return turn;
+    public boolean isFinish() {
+        return turn.isFinish();
+    }
+
+    public Map<Location, Piece> getBoard() {
+        return Collections.unmodifiableMap(board);
     }
 }

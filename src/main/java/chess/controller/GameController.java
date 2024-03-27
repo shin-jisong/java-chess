@@ -29,14 +29,10 @@ public class GameController {
 
     private void play() {
         String command = INIT_COMMAND;
-        while (!InputView.END.equalsIgnoreCase(command) || !checkBoardFinish()) {
+        while (!InputView.END.equalsIgnoreCase(command) || !isBoardFinish()) {
             command = inputView.readCommand();
             playTurn(command);
         }
-    }
-
-    private boolean checkBoardFinish() {
-        return board != null && board.isFinish();
     }
 
     private void playTurn(String command) {
@@ -45,22 +41,22 @@ public class GameController {
             return;
         }
         if (InputView.STATUS.equalsIgnoreCase(command)) {
-            checkStatus();
+            calculateStatus();
             return;
         }
         move(command);
     }
 
-    private void checkStatus() {
+    private void createBoard() {
+        board = new Board();
+        outputView.printBoard(board.getBoard());
+    }
+
+    private void calculateStatus() {
         checkBoard();
         double blackScore = board.calculateBlackScore();
         double whiteScore = board.calculateWhiteScore();
         outputView.printStatus(blackScore, whiteScore);
-    }
-
-    private void createBoard() {
-        board = new Board();
-        outputView.printBoard(board.getBoard());
     }
 
     private void move(String command) {
@@ -70,6 +66,10 @@ public class GameController {
         GameStatus gameStatus = board.proceedTurn(moveCommand);
         outputView.printBoard(board.getBoard());
         checkFinish(gameStatus);
+    }
+
+    private boolean isBoardFinish() {
+        return board != null && board.isFinish();
     }
 
     private void checkFinish(GameStatus gameStatus) {
