@@ -1,5 +1,6 @@
 package chess.controller;
 
+import chess.db.DBConnector;
 import chess.domain.board.Board;
 import chess.domain.board.game.GameStatus;
 import chess.domain.board.game.MoveCommand;
@@ -7,9 +8,9 @@ import chess.view.InputView;
 import chess.view.OutputView;
 
 public class GameController {
+    private final DBConnector dbConnector = new DBConnector();
     private static final InputView inputView = new InputView();
     private static final OutputView outputView = new OutputView();
-    public static final String INIT_COMMAND = "";
 
     private Board board = null;
 
@@ -28,10 +29,10 @@ public class GameController {
     }
 
     private void play() {
-        String command = INIT_COMMAND;
-        while (!InputView.END.equalsIgnoreCase(command) || !isBoardFinish()) {
-            command = inputView.readCommand();
+        String command = inputView.readCommand();
+        while (!InputView.END.equalsIgnoreCase(command) && !isBoardFinish()) {
             playTurn(command);
+            command = inputView.readCommand();
         }
     }
 
