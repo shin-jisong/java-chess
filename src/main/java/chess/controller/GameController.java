@@ -1,6 +1,6 @@
 package chess.controller;
 
-import chess.db.DBConnector;
+import chess.db.DBService;
 import chess.domain.board.Board;
 import chess.domain.board.game.GameStatus;
 import chess.domain.board.game.MoveCommand;
@@ -8,12 +8,13 @@ import chess.view.InputView;
 import chess.view.OutputView;
 
 public class GameController {
-    private static final InputView inputView = new InputView();
-    private static final OutputView outputView = new OutputView();
+    private static final InputView INPUT_VIEW = new InputView();
+    private static final OutputView OUTPUT_VIEW = new OutputView();
+    private static final DBService DB_SERVICE = new DBService();
     private Board board = null;
 
     public void run() {
-        outputView.printGameStart();
+        OUTPUT_VIEW.printGameStart();
         proceed();
     }
 
@@ -21,16 +22,23 @@ public class GameController {
         try {
             play();
         } catch (RuntimeException exception) {
-            outputView.printException(exception);
+            OUTPUT_VIEW.printException(exception);
             proceed();
         }
     }
 
     private void play() {
-        String command = inputView.readCommand();
+        String command = INPUT_VIEW.readCommand();
         while (!InputView.END.equalsIgnoreCase(command) && !isBoardFinish()) {
             playTurn(command);
-            command = inputView.readCommand();
+            command = INPUT_VIEW.readCommand();
+        }
+        saveGame();
+    }
+
+    private void saveGame() {
+        if (board != null && !board.isFinish()) {
+            DB_SERVICE.saveGame(board);
         }
     }
 
@@ -48,14 +56,14 @@ public class GameController {
 
     private void createBoard() {
         board = new Board();
-        outputView.printBoard(board.getBoard());
+        OUTPUT_VIEW.printBoard(board.getBoard());
     }
 
     private void calculateStatus() {
         checkBoard();
         double blackScore = board.calculateBlackScore();
         double whiteScore = board.calculateWhiteScore();
-        outputView.printStatus(blackScore, whiteScore);
+        OUTPUT_VIEW.printStatus(blackScore, whiteScore);
     }
 
     private void move(String command) {
@@ -63,7 +71,7 @@ public class GameController {
         String[] commands = command.split(InputView.DELIMITER);
         MoveCommand moveCommand = new MoveCommand(commands[1], commands[2]);
         GameStatus gameStatus = board.proceedTurn(moveCommand);
-        outputView.printBoard(board.getBoard());
+        OUTPUT_VIEW.printBoard(board.getBoard());
         checkFinish(gameStatus);
     }
 
@@ -75,7 +83,7 @@ public class GameController {
         if (gameStatus.equals(GameStatus.IN_PROGRESS)) {
             return;
         }
-        outputView.printFinish(gameStatus);
+        OUTPUT_VIEW.printFinish(gameStatus);
     }
 
     private void checkBoard() {
