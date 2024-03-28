@@ -1,5 +1,6 @@
-package chess.db;
+package chess.db.dao;
 
+import chess.db.DBConnector;
 import java.sql.Connection;
 
 public class PieceDao {

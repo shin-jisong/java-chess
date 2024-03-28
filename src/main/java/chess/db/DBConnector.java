@@ -5,13 +5,16 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnector {
-    private static final String DATABASE = "chess";
     private static final String SERVER = "localhost:13306";
+    private static final String DATABASE = "chess";
     private static final String OPTION = "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root";
 
     private static DBConnector instance = null;
+
+    private DBConnector() {
+    }
 
     public static DBConnector getInstance() {
         if (instance == null) {
@@ -24,7 +27,7 @@ public class DBConnector {
         try {
             return DriverManager.getConnection("jdbc:mysql://" + SERVER + "/" + DATABASE + OPTION, USERNAME, PASSWORD);
         } catch (final SQLException e) {
-            System.out.println("DB 연결 오류: " + e.getMessage());
+            System.err.println("DB 연결 오류:" + e.getMessage());
             e.printStackTrace();
             return null;
         }
