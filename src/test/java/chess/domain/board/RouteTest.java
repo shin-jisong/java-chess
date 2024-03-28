@@ -11,46 +11,12 @@ import org.junit.jupiter.api.Test;
 
 class RouteTest {
 
-    @DisplayName("Route를 생성할 수 있다.")
-    @Nested
-    class constructTest {
-        @DisplayName("방향들의 길이와 상태들의 길이가 동일해야 한다.")
-        @Test
-        void stepSizeTest() {
-            assertThatThrownBy(() -> new Route(
-                    List.of(Direction.DOWN, Direction.DOWN),
-                    List.of(SquareState.EMPTY, SquareState.EMPTY, SquareState.EMPTY)
-            ))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("방향의 개수와 상태의 개수가 다릅니다.");
-        }
-        @DisplayName("경로의 길이는 7칸을 넘을 수 없다.")
-        @Test
-        void pathMaxLengthTest() {
-            assertThatThrownBy(() -> new Route(
-                            List.of(Direction.DOWN, Direction.DOWN, Direction.DOWN, Direction.DOWN, Direction.DOWN, Direction.DOWN, Direction.DOWN, Direction.DOWN),
-                            List.of(SquareState.EMPTY, SquareState.EMPTY, SquareState.EMPTY, SquareState.EMPTY, SquareState.EMPTY, SquareState.EMPTY, SquareState.EMPTY, SquareState.EMPTY)
-                    ))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("경로의 길이는 7칸을 넘을 수 없습니다.");
-        }
-
-        @DisplayName("경로의 길이는 1칸 이상이어야 한다.")
-        @Test
-        void pathMinLengthTest() {
-            assertThatThrownBy(() -> new Route(Collections.emptyList(), Collections.emptyList()))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("제자리 경로를 생성할 수 없습니다.");
-        }
-
-    }
-
     @DisplayName("경로의 길이를 판별할 수 있다.")
     @Test
     void isSizeOfTest() {
         Route route = new Route(
-            List.of(Direction.DOWN, Direction.DOWN),
-            List.of(SquareState.EMPTY, SquareState.EMPTY)
+                List.of(Direction.DOWN, Direction.DOWN),
+                List.of(SquareState.EMPTY, SquareState.EMPTY)
         );
 
         assertThat(route.isSizeOf(2)).isTrue();
@@ -65,6 +31,43 @@ class RouteTest {
         );
 
         assertThat(route.isDirectionsCount(2)).isTrue();
+    }
+
+    @DisplayName("Route를 생성할 수 있다.")
+    @Nested
+    class constructTest {
+        @DisplayName("방향들의 길이와 상태들의 길이가 동일해야 한다.")
+        @Test
+        void stepSizeTest() {
+            assertThatThrownBy(() -> new Route(
+                    List.of(Direction.DOWN, Direction.DOWN),
+                    List.of(SquareState.EMPTY, SquareState.EMPTY, SquareState.EMPTY)
+            ))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("방향의 개수와 상태의 개수가 다릅니다.");
+        }
+
+        @DisplayName("경로의 길이는 7칸을 넘을 수 없다.")
+        @Test
+        void pathMaxLengthTest() {
+            assertThatThrownBy(() -> new Route(
+                    List.of(Direction.DOWN, Direction.DOWN, Direction.DOWN, Direction.DOWN, Direction.DOWN,
+                            Direction.DOWN, Direction.DOWN, Direction.DOWN),
+                    List.of(SquareState.EMPTY, SquareState.EMPTY, SquareState.EMPTY, SquareState.EMPTY,
+                            SquareState.EMPTY, SquareState.EMPTY, SquareState.EMPTY, SquareState.EMPTY)
+            ))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("경로의 길이는 7칸을 넘을 수 없습니다.");
+        }
+
+        @DisplayName("경로의 길이는 1칸 이상이어야 한다.")
+        @Test
+        void pathMinLengthTest() {
+            assertThatThrownBy(() -> new Route(Collections.emptyList(), Collections.emptyList()))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("제자리 경로를 생성할 수 없습니다.");
+        }
+
     }
 
     @DisplayName("대각선을 포함하고 있는지 확인할 수 있다.")

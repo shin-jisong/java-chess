@@ -8,10 +8,8 @@ import chess.view.InputView;
 import chess.view.OutputView;
 
 public class GameController {
-    private final DBConnector dbConnector = new DBConnector();
     private static final InputView inputView = new InputView();
     private static final OutputView outputView = new OutputView();
-
     private Board board = null;
 
     public void run() {

@@ -32,6 +32,18 @@ public class Board {
         this.turn = Turn.WHITE;
     }
 
+    private static GameStatus checkWinTeam(Piece targetPiece) {
+        if (targetPiece.isBlack()) {
+            return GameStatus.WHITE_WIN;
+        }
+        return GameStatus.BLACK_WIN;
+    }
+
+    private static void countPawnColumn(Location location, Map<Column, Integer> columnCount) {
+        Column column = location.getColumn();
+        columnCount.put(column, columnCount.getOrDefault(column, 0) + 1);
+    }
+
     private Map<Location, Piece> initialBoard() {
         Map<Location, Piece> initialBoard = new HashMap<>();
         initialPawnSetting(initialBoard);
@@ -62,13 +74,6 @@ public class Board {
         board.put(new Location(Column.G, Row.ONE), new Knight(Color.WHITE));
         board.put(new Location(Column.B, Row.EIGHT), new Knight(Color.BLACK));
         board.put(new Location(Column.G, Row.EIGHT), new Knight(Color.BLACK));
-    }
-
-    private static GameStatus checkWinTeam(Piece targetPiece) {
-        if (targetPiece.isBlack()) {
-            return GameStatus.WHITE_WIN;
-        }
-        return GameStatus.BLACK_WIN;
     }
 
     private void initialQueenSetting(Map<Location, Piece> board) {
@@ -134,18 +139,14 @@ public class Board {
     private int countSameColumnPawn(Color color) {
         Map<Column, Integer> columnCount = new HashMap<>();
         board.entrySet().stream()
-                .filter(entry -> entry.getValue().equalPieceType(PieceType.PAWN) && isPieceColorMatching(color, entry.getValue()))
+                .filter(entry -> entry.getValue().equalPieceType(PieceType.PAWN) && isPieceColorMatching(color,
+                        entry.getValue()))
                 .map(Map.Entry::getKey)
                 .forEach(location -> countPawnColumn(location, columnCount));
         return columnCount.values().stream()
                 .filter(integer -> integer > 1)
                 .mapToInt(i -> i)
                 .sum();
-    }
-
-    private static void countPawnColumn(Location location, Map<Column, Integer> columnCount) {
-        Column column = location.getColumn();
-        columnCount.put(column, columnCount.getOrDefault(column, 0) + 1);
     }
 
     private boolean isPieceColorMatching(Color color, Piece piece) {

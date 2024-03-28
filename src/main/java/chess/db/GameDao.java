@@ -1,7 +1,6 @@
 package chess.db;
 
 import java.sql.Connection;
-import java.util.function.Supplier;
 
 public class GameDao {
     private static final String TABLE = "game";

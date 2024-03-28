@@ -13,6 +13,19 @@ import java.util.Map;
 public class OutputView {
     public static final String ONE_SQUARE = ".";
 
+    private static String checkMinionPieceName(PieceType pieceType) {
+        if (pieceType == PieceType.ROOK) {
+            return "R";
+        }
+        if (pieceType == PieceType.BISHOP) {
+            return "B";
+        }
+        if (pieceType == PieceType.KNIGHT) {
+            return "N";
+        }
+        return "P";
+    }
+
     public void printGameStart() {
         System.out.println("> 체스 게임을 시작합니다.");
         System.out.println("> 게임 시작 : " + InputView.START);
@@ -76,19 +89,6 @@ public class OutputView {
             return "Q";
         }
         return checkMinionPieceName(pieceType);
-    }
-
-    private static String checkMinionPieceName(PieceType pieceType) {
-        if (pieceType == PieceType.ROOK) {
-            return "R";
-        }
-        if (pieceType == PieceType.BISHOP) {
-            return "B";
-        }
-        if (pieceType == PieceType.KNIGHT) {
-            return "N";
-        }
-        return "P";
     }
 
     public void printException(RuntimeException exception) {

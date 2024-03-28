@@ -12,6 +12,13 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 
 class TurnTest {
+    @DisplayName("턴이 끝났는지 확인한다.")
+    @ParameterizedTest
+    @CsvSource({"BLACK, false", "WHITE, false", "FINISH, true"})
+    void isMatchWhitePiece(Turn turn, boolean result) {
+        Assertions.assertThat(turn.isFinish()).isEqualTo(result);
+    }
+
     @DisplayName("다음 턴을 잘 넘긴다.")
     @Nested
     class nextTest {
@@ -91,12 +98,5 @@ class TurnTest {
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("해당 행동을 수행할 수 있는 순서가 아닙니다.");
         }
-    }
-
-    @DisplayName("턴이 끝났는지 확인한다.")
-    @ParameterizedTest
-    @CsvSource({"BLACK, false", "WHITE, false", "FINISH, true"})
-    void isMatchWhitePiece(Turn turn, boolean result) {
-        Assertions.assertThat(turn.isFinish()).isEqualTo(result);
     }
 }
