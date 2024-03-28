@@ -28,4 +28,8 @@ public abstract class Piece {
     public PieceType getPieceType() {
         return pieceType;
     }
+
+    public Color getColor() {
+        return color;
+    }
 }

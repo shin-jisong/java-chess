@@ -51,8 +51,8 @@ public class Location {
         return this.column.calculateDistance(target.column);
     }
 
-    public Column getColumn() {
-        return column;
+    public String toString() {
+        return column.name() + row.name();
     }
 
     @Override
