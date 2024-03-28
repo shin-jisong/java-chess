@@ -1,4 +1,4 @@
-package chess.view;
+package chess.domain.board.game;
 
 import chess.domain.location.Location;
 

@@ -1,4 +1,4 @@
-package chess.domain.board;
+package chess.domain.board.game;
 
 public enum GameStatus {
     BLACK_WIN,

@@ -1,5 +1,9 @@
 package chess.domain.board;
 
+import chess.domain.board.game.GameStatus;
+import chess.domain.board.game.MoveCommand;
+import chess.domain.board.game.Score;
+import chess.domain.board.game.Turn;
 import chess.domain.location.Column;
 import chess.domain.location.Location;
 import chess.domain.location.Row;
@@ -13,7 +17,6 @@ import chess.domain.piece.PieceType;
 import chess.domain.piece.Queen;
 import chess.domain.piece.Rook;
 import chess.domain.piece.WhitePawn;
-import chess.view.MoveCommand;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,7 +31,6 @@ public class Board {
         this.board = initialBoard();
         this.turn = Turn.WHITE;
     }
-
 
     private Map<Location, Piece> initialBoard() {
         Map<Location, Piece> initialBoard = new HashMap<>();
@@ -62,6 +64,13 @@ public class Board {
         board.put(new Location(Column.G, Row.EIGHT), new Knight(Color.BLACK));
     }
 
+    private static GameStatus checkWinTeam(Piece targetPiece) {
+        if (targetPiece.isBlack()) {
+            return GameStatus.WHITE_WIN;
+        }
+        return GameStatus.BLACK_WIN;
+    }
+
     private void initialQueenSetting(Map<Location, Piece> board) {
         board.put(new Location(Column.D, Row.ONE), new Queen(Color.WHITE));
         board.put(new Location(Column.D, Row.EIGHT), new Queen(Color.BLACK));
@@ -80,22 +89,6 @@ public class Board {
         return checkTurn(targetPiece);
     }
 
-    private static GameStatus checkWinTeam(Piece targetPiece) {
-        if (targetPiece.isBlack()) {
-            return GameStatus.WHITE_WIN;
-        }
-        return GameStatus.BLACK_WIN;
-    }
-
-    private GameStatus checkTurn(Piece targetPiece) {
-        if (targetPiece != null && targetPiece.equalPieceType(PieceType.KING)) {
-            turn = turn.stop();
-            return checkWinTeam(targetPiece);
-        }
-        turn = turn.next();
-        return GameStatus.IN_PROGRESS;
-    }
-
     private void tryMove(MoveCommand moveCommand, Piece sourcePiece) {
         Route route = createPath(moveCommand);
         if (sourcePiece.canMove(route)) {
@@ -105,16 +98,25 @@ public class Board {
         throw new IllegalArgumentException("유효하지 않은 움직임입니다.");
     }
 
-    private void validateMatchPiece(Piece sourcePiece) {
-        if (turn.isMatchPiece(sourcePiece)) {
-            return;
-        }
-        throw new IllegalArgumentException("해당 행동을 수행할 수 있는 순서가 아닙니다.");
-    }
-
     private void move(MoveCommand moveCommand, Piece movingPiece) {
         board.remove(moveCommand.getSource());
         board.put(moveCommand.getTarget(), movingPiece);
+    }
+
+    private void initialBishopSetting(Map<Location, Piece> board) {
+        board.put(new Location(Column.C, Row.ONE), new Bishop(Color.WHITE));
+        board.put(new Location(Column.F, Row.ONE), new Bishop(Color.WHITE));
+        board.put(new Location(Column.C, Row.EIGHT), new Bishop(Color.BLACK));
+        board.put(new Location(Column.F, Row.EIGHT), new Bishop(Color.BLACK));
+    }
+
+    private GameStatus checkTurn(Piece targetPiece) {
+        if (targetPiece != null && targetPiece.equalPieceType(PieceType.KING)) {
+            turn = turn.stop();
+            return checkWinTeam(targetPiece);
+        }
+        turn = turn.next();
+        return GameStatus.IN_PROGRESS;
     }
 
     public double calculateBlackScore() {
@@ -179,11 +181,8 @@ public class Board {
         return SquareState.ENEMY;
     }
 
-    private void initialBishopSetting(Map<Location, Piece> board) {
-        board.put(new Location(Column.C, Row.ONE), new Bishop(Color.WHITE));
-        board.put(new Location(Column.F, Row.ONE), new Bishop(Color.WHITE));
-        board.put(new Location(Column.C, Row.EIGHT), new Bishop(Color.BLACK));
-        board.put(new Location(Column.F, Row.EIGHT), new Bishop(Color.BLACK));
+    public boolean isFinish() {
+        return turn.isFinish();
     }
 
     private Piece findPieceAt(Location source) {
@@ -192,14 +191,17 @@ public class Board {
         return piece;
     }
 
+    private void validateMatchPiece(Piece sourcePiece) {
+        if (turn.isMatchPiece(sourcePiece)) {
+            return;
+        }
+        throw new IllegalArgumentException("해당 행동을 수행할 수 있는 순서가 아닙니다.");
+    }
+
     private void validatePiece(Piece piece) {
         if (piece == null) {
             throw new IllegalArgumentException("말이 존재하지 않습니다.");
         }
-    }
-
-    public boolean isFinish() {
-        return turn.isFinish();
     }
 
     public Map<Location, Piece> getBoard() {
