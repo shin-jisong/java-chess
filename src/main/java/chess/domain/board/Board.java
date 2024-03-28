@@ -208,4 +208,8 @@ public class Board {
     public Map<Location, Piece> getBoard() {
         return Collections.unmodifiableMap(board);
     }
+
+    public Turn getTurn() {
+        return turn;
+    }
 }
