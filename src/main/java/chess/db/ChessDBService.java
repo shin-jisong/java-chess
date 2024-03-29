@@ -1,7 +1,9 @@
 package chess.db;
 
 import chess.db.dao.GameDao;
+import chess.db.dao.GameDaoImpl;
 import chess.db.dao.PieceDao;
+import chess.db.dao.PieceDaoImpl;
 import chess.db.dto.PieceDto;
 import chess.domain.board.Board;
 import chess.domain.board.game.Turn;
@@ -18,10 +20,14 @@ public class ChessDBService {
 
 
     public ChessDBService(ChessDBConnector connector) {
-        this.gameDao = new GameDao(connector);
-        this.pieceDao = new PieceDao(connector);
+        this.gameDao = new GameDaoImpl(connector);
+        this.pieceDao = new PieceDaoImpl(connector);
     }
 
+    protected ChessDBService(GameDao gameDao, PieceDao pieceDao) {
+        this.gameDao = gameDao;
+        this.pieceDao = pieceDao;
+    }
 
     public void saveGame(Board board) {
         int gameId = gameDao.addGame(board.getTurn());
@@ -64,6 +70,4 @@ public class ChessDBService {
         }
         return board;
     }
-
-
 }
