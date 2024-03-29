@@ -40,18 +40,6 @@ public class Board {
         return checkTurn(targetPiece);
     }
 
-    private GameStatus checkWinTeam(Piece targetPiece) {
-        if (targetPiece.isBlack()) {
-            return GameStatus.WHITE_WIN;
-        }
-        return GameStatus.BLACK_WIN;
-    }
-
-    private void countPawnColumn(Location location, Map<Column, Integer> columnCount) {
-        Column column = location.getColumn();
-        columnCount.put(column, columnCount.getOrDefault(column, 0) + 1);
-    }
-
     private void tryMove(MoveCommand moveCommand, Piece sourcePiece) {
         Route route = createPath(moveCommand);
         if (sourcePiece.canMove(route)) {
@@ -73,6 +61,13 @@ public class Board {
         }
         turn = turn.next();
         return GameStatus.IN_PROGRESS;
+    }
+
+    private GameStatus checkWinTeam(Piece targetPiece) {
+        if (targetPiece.isBlack()) {
+            return GameStatus.WHITE_WIN;
+        }
+        return GameStatus.BLACK_WIN;
     }
 
     public double calculateBlackScore() {
@@ -98,6 +93,11 @@ public class Board {
                 .filter(integer -> integer > 1)
                 .mapToInt(i -> i)
                 .sum();
+    }
+
+    private void countPawnColumn(Location location, Map<Column, Integer> columnCount) {
+        Column column = location.getColumn();
+        columnCount.put(column, columnCount.getOrDefault(column, 0) + 1);
     }
 
     private boolean isPieceColorMatching(Color color, Piece piece) {
