@@ -103,4 +103,20 @@ public class OutputView {
             System.out.println("백팀의 승리로 게임이 종료되었습니다.");
         }
     }
+
+    public void printSave() {
+        System.out.println("게임의 현황을 저장하고 게임을 종료합니다.");
+    }
+
+    public void printNotSave() {
+        System.out.println("게임의 현황을 저장하지 않고 게임을 종료합니다.");
+    }
+
+    public void printLoad() {
+        System.out.println("보드를 불러왔습니다. 게임을 시작합니다.");
+    }
+
+    public void printNotLoad() {
+        System.out.println("지난 보드 이력을 삭제하고 새로운 게임을 시작합니다.");
+    }
 }

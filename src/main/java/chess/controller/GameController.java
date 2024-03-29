@@ -34,13 +34,22 @@ public class GameController {
             playTurn(command);
             command = INPUT_VIEW.readCommand();
         }
-        saveGame();
+        checkSaveGame();
     }
 
-    private void saveGame() {
+    private void checkSaveGame() {
         if (board != null && !board.isFinish()) {
-            DB_SERVICE.saveGame(board);
+            saveGameOrNot();
         }
+    }
+
+    private void saveGameOrNot() {
+        if (INPUT_VIEW.readFinishSave()) {
+            DB_SERVICE.saveGame(board);
+            OUTPUT_VIEW.printSave();
+            return;
+        }
+        OUTPUT_VIEW.printNotSave();
     }
 
     private void playTurn(String command) {
@@ -62,11 +71,22 @@ public class GameController {
 
     private void findBoardIfExist() {
         if (DB_SERVICE.isLatestGame()) {
+            loadBoardOrNot();
+        }
+        if (board == null) {
+            board = new Board();
+        }
+    }
+
+    private void loadBoardOrNot() {
+        if (INPUT_VIEW.readLoadGame()) {
             board = DB_SERVICE.loadGame();
             DB_SERVICE.deleteGame();
+            OUTPUT_VIEW.printLoad();
             return;
         }
-        board = new Board();
+        DB_SERVICE.deleteGame();
+        OUTPUT_VIEW.printNotLoad();
     }
 
     private void calculateStatus() {
