@@ -16,15 +16,15 @@ import java.util.function.Supplier;
 
 public class PieceDao {
     private static final String TABLE = "piece";
-    private final Supplier<Connection> connector;
+    private final DBConnector connector;
 
-    public PieceDao(Supplier<Connection> connector) {
+    public PieceDao(DBConnector connector) {
         this.connector = connector;
     }
 
     public void addPiece(int gameId, PieceDto pieceDto) {
         final String query = String.format("INSERT INTO %s VALUES(?, ?, ?, ?)", TABLE);
-        try (final Connection connection = connector.get();
+        try (final Connection connection = connector.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, gameId);
             preparedStatement.setString(2, pieceDto.pieceType());
@@ -38,7 +38,7 @@ public class PieceDao {
 
     public List<PieceDto> findAllPiecesByGameId(int gameId) {
         final String query = String.format("SELECT * FROM %s WHERE `game_id` = ?", TABLE);
-        try (final Connection connection = connector.get()) {
+        try (final Connection connection = connector.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, gameId);
             ResultSet resultSet = statement.executeQuery();
@@ -58,7 +58,7 @@ public class PieceDao {
 
     public void deletePieces(int gameId) {
         final String query = String.format("DELETE FROM %s WHERE `game_id` = ?", TABLE);
-        try (final Connection connection = connector.get();
+        try (final Connection connection = connector.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement(query);) {
             preparedStatement.setInt(1, gameId);
             preparedStatement.executeUpdate();

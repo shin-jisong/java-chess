@@ -12,15 +12,15 @@ import java.util.function.Supplier;
 public class GameDao {
     private static final String TABLE = "game";
 
-    private final Supplier<Connection> connector;
+    private final DBConnector connector;
 
-    public GameDao(Supplier<Connection> connector) {
-        this.connector = connector;
+    public GameDao(DBConnector dbConnector) {
+        this.connector = dbConnector;
     }
 
     public int addGame(Turn turn) {
         final String query = String.format("INSERT INTO %s(turn) VALUE(?);", TABLE);
-        try (final Connection connection = connector.get();
+        try (final Connection connection = connector.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement(query,
                      Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, turn.name());
@@ -37,7 +37,7 @@ public class GameDao {
 
     public int findLatestGameId() {
         final String query = String.format("SELECT game_id FROM %s ORDER BY `game_id` DESC LIMIT 1", TABLE);
-        try (final Connection connection = connector.get();
+        try (final Connection connection = connector.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             final ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -51,7 +51,7 @@ public class GameDao {
 
     public Turn findTurn(int gameId) {
         final String query = String.format("SELECT turn FROM %s WHERE `game_id` = ?", TABLE);
-        try (final Connection connection = connector.get();
+        try (final Connection connection = connector.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, gameId);
             final ResultSet resultSet = preparedStatement.executeQuery();
@@ -67,7 +67,7 @@ public class GameDao {
 
     public void deleteGame(int gameId) {
         final String query = String.format("DELETE FROM %s WHERE `game_id` = ?", TABLE);
-        try (final Connection connection = connector.get();
+        try (final Connection connection = connector.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement(query);) {
              preparedStatement.setInt(1, gameId);
             preparedStatement.executeUpdate();

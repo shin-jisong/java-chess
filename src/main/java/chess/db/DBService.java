@@ -19,7 +19,7 @@ public class DBService {
     private final PieceDao pieceDao;
 
 
-    public DBService(Supplier<Connection> connector) {
+    public DBService(DBConnector connector) {
         this.gameDao = new GameDao(connector);
         this.pieceDao = new PieceDao(connector);
     }
