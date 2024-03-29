@@ -73,14 +73,14 @@ public class OutputView {
         if (piece == null) {
             return ONE_SQUARE;
         }
-        String pieceName = checkPieceName(piece);
+        String pieceName = findPieceName(piece);
         if (piece.isBlack()) {
             return pieceName.toUpperCase();
         }
         return pieceName.toLowerCase();
     }
 
-    private String checkPieceName(Piece piece) {
+    private String findPieceName(Piece piece) {
         PieceType pieceType = piece.getPieceType();
         if (pieceType == PieceType.KING) {
             return "K";

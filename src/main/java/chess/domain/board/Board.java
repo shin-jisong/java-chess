@@ -8,17 +8,9 @@ import chess.domain.board.game.Score;
 import chess.domain.board.game.Turn;
 import chess.domain.location.Column;
 import chess.domain.location.Location;
-import chess.domain.location.Row;
-import chess.domain.piece.Bishop;
-import chess.domain.piece.BlackPawn;
 import chess.domain.piece.Color;
-import chess.domain.piece.King;
-import chess.domain.piece.Knight;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
-import chess.domain.piece.Queen;
-import chess.domain.piece.Rook;
-import chess.domain.piece.WhitePawn;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,24 +31,25 @@ public class Board {
         this.turn = turn;
     }
 
-    private static GameStatus checkWinTeam(Piece targetPiece) {
+    public GameStatus proceedTurn(MoveCommand moveCommand) {
+        validatePieceAtLocation(moveCommand.getSource());
+        Piece sourcePiece = board.get(moveCommand.getSource());
+        Piece targetPiece = board.get(moveCommand.getTarget());
+        validateMatchPiece(sourcePiece);
+        tryMove(moveCommand, sourcePiece);
+        return checkTurn(targetPiece);
+    }
+
+    private GameStatus checkWinTeam(Piece targetPiece) {
         if (targetPiece.isBlack()) {
             return GameStatus.WHITE_WIN;
         }
         return GameStatus.BLACK_WIN;
     }
 
-    private static void countPawnColumn(Location location, Map<Column, Integer> columnCount) {
+    private void countPawnColumn(Location location, Map<Column, Integer> columnCount) {
         Column column = location.getColumn();
         columnCount.put(column, columnCount.getOrDefault(column, 0) + 1);
-    }
-
-    public GameStatus proceedTurn(MoveCommand moveCommand) {
-        Piece sourcePiece = findPieceAt(moveCommand.getSource());
-        Piece targetPiece = board.get(moveCommand.getTarget());
-        validateMatchPiece(sourcePiece);
-        tryMove(moveCommand, sourcePiece);
-        return checkTurn(targetPiece);
     }
 
     private void tryMove(MoveCommand moveCommand, Piece sourcePiece) {
@@ -97,8 +90,8 @@ public class Board {
     private int countSameColumnPawn(Color color) {
         Map<Column, Integer> columnCount = new HashMap<>();
         board.entrySet().stream()
-                .filter(entry -> entry.getValue().equalPieceType(PieceType.PAWN) && isPieceColorMatching(color,
-                        entry.getValue()))
+                .filter(entry -> entry.getValue()
+                        .equalPieceType(PieceType.PAWN) && isPieceColorMatching(color, entry.getValue()))
                 .map(Map.Entry::getKey)
                 .forEach(location -> countPawnColumn(location, columnCount));
         return columnCount.values().stream()
@@ -119,7 +112,8 @@ public class Board {
     }
 
     private List<SquareState> createPathState(Location current, List<Direction> directions) {
-        Piece movingPiece = findPieceAt(current);
+        validatePieceAtLocation(current);
+        Piece movingPiece = board.get(current);
         List<SquareState> squareStates = new ArrayList<>();
         Location moved = current;
         for (Direction direction : directions) {
@@ -144,12 +138,6 @@ public class Board {
         return turn.isFinish();
     }
 
-    private Piece findPieceAt(Location source) {
-        Piece piece = board.get(source);
-        validatePiece(piece);
-        return piece;
-    }
-
     private void validateMatchPiece(Piece sourcePiece) {
         if (turn.isMatchPiece(sourcePiece)) {
             return;
@@ -157,8 +145,8 @@ public class Board {
         throw new IllegalArgumentException("해당 행동을 수행할 수 있는 순서가 아닙니다.");
     }
 
-    private void validatePiece(Piece piece) {
-        if (piece == null) {
+    private void validatePieceAtLocation(Location location) {
+        if (board.get(location) == null) {
             throw new IllegalArgumentException("말이 존재하지 않습니다.");
         }
     }
