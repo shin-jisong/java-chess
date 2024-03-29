@@ -1,5 +1,7 @@
 package chess.domain.board;
 
+import static chess.domain.board.BoardInitializer.initialBoard;
+
 import chess.domain.board.game.GameStatus;
 import chess.domain.board.game.MoveCommand;
 import chess.domain.board.game.Score;
@@ -49,48 +51,6 @@ public class Board {
         columnCount.put(column, columnCount.getOrDefault(column, 0) + 1);
     }
 
-    private Map<Location, Piece> initialBoard() {
-        Map<Location, Piece> initialBoard = new HashMap<>();
-        initialPawnSetting(initialBoard);
-        initialRookSetting(initialBoard);
-        initialKnightSetting(initialBoard);
-        initialBishopSetting(initialBoard);
-        initialQueenSetting(initialBoard);
-        initialKingSetting(initialBoard);
-        return initialBoard;
-    }
-
-    private void initialPawnSetting(Map<Location, Piece> board) {
-        for (Column value : Column.values()) {
-            board.put(new Location(value, Row.TWO), new WhitePawn());
-            board.put(new Location(value, Row.SEVEN), new BlackPawn());
-        }
-    }
-
-    private void initialRookSetting(Map<Location, Piece> board) {
-        board.put(new Location(Column.A, Row.ONE), new Rook(Color.WHITE));
-        board.put(new Location(Column.H, Row.ONE), new Rook(Color.WHITE));
-        board.put(new Location(Column.A, Row.EIGHT), new Rook(Color.BLACK));
-        board.put(new Location(Column.H, Row.EIGHT), new Rook(Color.BLACK));
-    }
-
-    private void initialKnightSetting(Map<Location, Piece> board) {
-        board.put(new Location(Column.B, Row.ONE), new Knight(Color.WHITE));
-        board.put(new Location(Column.G, Row.ONE), new Knight(Color.WHITE));
-        board.put(new Location(Column.B, Row.EIGHT), new Knight(Color.BLACK));
-        board.put(new Location(Column.G, Row.EIGHT), new Knight(Color.BLACK));
-    }
-
-    private void initialQueenSetting(Map<Location, Piece> board) {
-        board.put(new Location(Column.D, Row.ONE), new Queen(Color.WHITE));
-        board.put(new Location(Column.D, Row.EIGHT), new Queen(Color.BLACK));
-    }
-
-    private void initialKingSetting(Map<Location, Piece> board) {
-        board.put(new Location(Column.E, Row.ONE), new King(Color.WHITE));
-        board.put(new Location(Column.E, Row.EIGHT), new King(Color.BLACK));
-    }
-
     public GameStatus proceedTurn(MoveCommand moveCommand) {
         Piece sourcePiece = findPieceAt(moveCommand.getSource());
         Piece targetPiece = board.get(moveCommand.getTarget());
@@ -111,13 +71,6 @@ public class Board {
     private void move(MoveCommand moveCommand, Piece movingPiece) {
         board.remove(moveCommand.getSource());
         board.put(moveCommand.getTarget(), movingPiece);
-    }
-
-    private void initialBishopSetting(Map<Location, Piece> board) {
-        board.put(new Location(Column.C, Row.ONE), new Bishop(Color.WHITE));
-        board.put(new Location(Column.F, Row.ONE), new Bishop(Color.WHITE));
-        board.put(new Location(Column.C, Row.EIGHT), new Bishop(Color.BLACK));
-        board.put(new Location(Column.F, Row.EIGHT), new Bishop(Color.BLACK));
     }
 
     private GameStatus checkTurn(Piece targetPiece) {
