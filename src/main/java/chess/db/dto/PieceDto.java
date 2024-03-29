@@ -61,13 +61,14 @@ public record PieceDto(
         Location location = Location.of(this.location);
         if (teamColor == Color.BLACK) {
             BlackPawn blackPawn = new BlackPawn();
-            return checkPawnMoved(location, blackPawn, Row.SEVEN);
+            return checkPawnMoved(blackPawn, Row.SEVEN);
         }
         WhitePawn whitePawn = new WhitePawn();
-        return checkPawnMoved(location, whitePawn, Row.TWO);
+        return checkPawnMoved(whitePawn, Row.TWO);
     }
 
-    private Pawn checkPawnMoved(Location location, Pawn pawn, Row row) {
+    private Pawn checkPawnMoved(Pawn pawn, Row row) {
+        Location location = Location.of(this.location);
         if (location.getRow().equals(row)) {
             pawn.settingInitialMoved(false);
             return pawn;
