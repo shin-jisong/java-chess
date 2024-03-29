@@ -20,6 +20,10 @@ public record PieceDto(
         String color,
         String location
 ) {
+
+    private static final boolean NOT_MOVED = false;
+    private static final boolean MOVED = true;
+
     public static PieceDto of(Piece piece, Location location) {
         return new PieceDto(
                 piece.getPieceType().name(),
@@ -60,20 +64,23 @@ public record PieceDto(
     private Pawn makePawn(Color teamColor) {
         Location location = Location.of(this.location);
         if (teamColor == Color.BLACK) {
-            BlackPawn blackPawn = new BlackPawn();
-            return checkPawnMoved(blackPawn, Row.SEVEN);
+            return makeBlackPawn(location);
         }
-        WhitePawn whitePawn = new WhitePawn();
-        return checkPawnMoved(whitePawn, Row.TWO);
+        return makeWhitePawn(location);
+
     }
 
-    private Pawn checkPawnMoved(Pawn pawn, Row row) {
-        Location location = Location.of(this.location);
-        if (location.getRow().equals(row)) {
-            pawn.settingInitialMoved(false);
-            return pawn;
+    private BlackPawn makeBlackPawn(Location location) {
+        if (location.getRow().equals(Row.SEVEN)) {
+            return new BlackPawn(NOT_MOVED);
         }
-        pawn.settingInitialMoved(true);
-        return pawn;
+        return new BlackPawn(MOVED);
+    }
+
+    private WhitePawn makeWhitePawn(Location location) {
+        if (location.getRow().equals(Row.TWO)) {
+            return new WhitePawn(NOT_MOVED);
+        }
+        return new WhitePawn(MOVED);
     }
 }

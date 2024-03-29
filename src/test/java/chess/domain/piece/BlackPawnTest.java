@@ -18,7 +18,7 @@ class BlackPawnTest {
 
     @BeforeEach
     void beforeEach() {
-        BLACK_PAWN = new BlackPawn();
+        BLACK_PAWN = new BlackPawn(false);
     }
 
     @DisplayName("폰은 한 방향으로만 이동할 수 있다.")

@@ -3,8 +3,14 @@ package chess.domain.piece;
 import chess.domain.board.Route;
 
 public class WhitePawn extends Pawn {
-    public WhitePawn() {
-        super(Color.WHITE);
+    private static final boolean INITIAL_MOVED = false;
+
+    public WhitePawn () {
+        super(Color.WHITE, INITIAL_MOVED);
+    }
+
+    public WhitePawn(boolean moved) {
+        super(Color.WHITE, moved);
     }
 
     @Override
