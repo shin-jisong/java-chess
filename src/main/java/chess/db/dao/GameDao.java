@@ -64,4 +64,15 @@ public class GameDao {
         }
         return null;
     }
+
+    public void deleteGame(int gameId) {
+        final String query = String.format("DELETE FROM %s WHERE `game_id` = ?", TABLE);
+        try (final Connection connection = connector.get();
+             final PreparedStatement preparedStatement = connection.prepareStatement(query);) {
+             preparedStatement.setInt(1, gameId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

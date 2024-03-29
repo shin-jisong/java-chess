@@ -25,10 +25,9 @@ public class DBService {
     }
 
 
-    public int saveGame(Board board) {
+    public void saveGame(Board board) {
         int gameId = gameDao.addGame(board.getTurn());
         savePieces(gameId, board.getBoard());
-        return gameId;
     }
 
     public Board loadGame() {
@@ -36,6 +35,12 @@ public class DBService {
         Turn turn = findTurn(gameId);
         Map<Location, Piece> board = findBoard(gameId);
         return new Board(board, turn);
+    }
+
+    public void deleteGame() {
+        int gameId = gameDao.findLatestGameId();
+        pieceDao.deletePieces(gameId);
+        gameDao.deleteGame(gameId);
     }
 
     public boolean isLatestGame() {

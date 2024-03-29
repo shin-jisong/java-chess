@@ -32,7 +32,6 @@ public class PieceDao {
             preparedStatement.setString(4, pieceDto.location());
             preparedStatement.executeUpdate();
         } catch (final SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException("Error add piece", e);
         }
     }
@@ -53,8 +52,18 @@ public class PieceDao {
             }
             return pieces;
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException("Error finding pieces", e);
+        }
+    }
+
+    public void deletePieces(int gameId) {
+        final String query = String.format("DELETE FROM %s WHERE `game_id` = ?", TABLE);
+        try (final Connection connection = connector.get();
+             final PreparedStatement preparedStatement = connection.prepareStatement(query);) {
+            preparedStatement.setInt(1, gameId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

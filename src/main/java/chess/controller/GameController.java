@@ -63,6 +63,7 @@ public class GameController {
     private void findBoardIfExist() {
         if (DB_SERVICE.isLatestGame()) {
             board = DB_SERVICE.loadGame();
+            DB_SERVICE.deleteGame();
             return;
         }
         board = new Board();
