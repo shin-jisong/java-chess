@@ -11,7 +11,7 @@ import chess.view.OutputView;
 public class GameController {
     private static final InputView INPUT_VIEW = new InputView();
     private static final OutputView OUTPUT_VIEW = new OutputView();
-    private static final DBService DB_SERVICE = new DBService(() -> new DBConnector().getConnection());
+    private static final DBService DB_SERVICE = new DBService(new DBConnector());
     private Board board = null;
 
     public void run() {

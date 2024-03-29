@@ -1,5 +1,6 @@
 package chess.db.dto;
 
+import chess.domain.location.Column;
 import chess.domain.location.Location;
 import chess.domain.location.Row;
 import chess.domain.piece.Bishop;
@@ -18,7 +19,8 @@ import java.util.Objects;
 public record PieceDto(
         String pieceType,
         String color,
-        String location
+        String column,
+        int row
 ) {
 
     private static final boolean NOT_MOVED = false;
@@ -28,12 +30,13 @@ public record PieceDto(
         return new PieceDto(
                 piece.getPieceType().name(),
                 piece.getColor().name(),
-                location.toString()
+                location.getColumn().name(),
+                location.getRow().getRank()
         );
     }
 
     public Location makeLocation() {
-        return Location.of(location);
+        return Location.of(column + row);
     }
 
     public Piece makePiece() {
@@ -62,7 +65,7 @@ public record PieceDto(
     }
 
     private Pawn makePawn(Color teamColor) {
-        Location location = Location.of(this.location);
+        Location location = makeLocation();
         if (teamColor == Color.BLACK) {
             return makeBlackPawn(location);
         }

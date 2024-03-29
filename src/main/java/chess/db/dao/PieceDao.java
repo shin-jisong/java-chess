@@ -23,13 +23,14 @@ public class PieceDao {
     }
 
     public void addPiece(int gameId, PieceDto pieceDto) {
-        final String query = String.format("INSERT INTO %s VALUES(?, ?, ?, ?)", TABLE);
+        final String query = String.format("INSERT INTO %s VALUES(?, ?, ?, ?, ?)", TABLE);
         try (final Connection connection = connector.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, gameId);
             preparedStatement.setString(2, pieceDto.pieceType());
             preparedStatement.setString(3, pieceDto.color());
-            preparedStatement.setString(4, pieceDto.location());
+            preparedStatement.setString(4, pieceDto.column());
+            preparedStatement.setInt(5, pieceDto.row());
             preparedStatement.executeUpdate();
         } catch (final SQLException e) {
             throw new RuntimeException("Error add piece", e);
@@ -47,8 +48,9 @@ public class PieceDao {
             while (resultSet.next()) {
                 String pieceType = resultSet.getString("piece_type");
                 String color = resultSet.getString("color");
-                String location = resultSet.getString("location");
-                pieces.add(new PieceDto(pieceType, color, location));
+                String column = resultSet.getString("column");
+                int row = resultSet.getInt("row");
+                pieces.add(new PieceDto(pieceType, color, column, row));
             }
             return pieces;
         } catch (SQLException e) {
