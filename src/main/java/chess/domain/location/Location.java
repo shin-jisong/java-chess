@@ -55,8 +55,12 @@ public class Location {
         return column;
     }
 
+    public Row getRow() {
+        return row;
+    }
+
     public String toString() {
-        return column.name() + row.name();
+        return column.name() + Integer.toString(row.getRank());
     }
 
     @Override

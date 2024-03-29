@@ -63,4 +63,8 @@ public enum Row {
     public int calculateDistance(Row other) {
         return other.rank - this.rank;
     }
+
+    public int getRank() {
+        return rank;
+    }
 }

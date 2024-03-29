@@ -41,6 +41,7 @@ public class PieceDao {
         final String query = String.format("SELECT * FROM %s WHERE `game_id` = ?", TABLE);
         try (final Connection connection = connector.get()) {
             PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, gameId);
             ResultSet resultSet = statement.executeQuery();
 
             List<PieceDto> pieces = new ArrayList<>();
@@ -52,6 +53,7 @@ public class PieceDao {
             }
             return pieces;
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException("Error finding pieces", e);
         }
     }

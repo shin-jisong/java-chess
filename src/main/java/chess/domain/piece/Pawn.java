@@ -15,6 +15,10 @@ public abstract class Pawn extends Piece {
 
     abstract boolean isBackward(Route route);
 
+    public void settingInitialMoved(boolean moved) {
+        this.moved = moved;
+    }
+
     @Override
     public boolean canMove(Route route) {
         boolean movable = checkMovable(route);

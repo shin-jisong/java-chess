@@ -32,6 +32,11 @@ public class Board {
         this.turn = Turn.WHITE;
     }
 
+    public Board(Map<Location, Piece> board, Turn turn) {
+        this.board = board;
+        this.turn = turn;
+    }
+
     private static GameStatus checkWinTeam(Piece targetPiece) {
         if (targetPiece.isBlack()) {
             return GameStatus.WHITE_WIN;

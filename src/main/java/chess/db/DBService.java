@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class DBService {
+    private static final int NO_LATEST_GAME = -1;
     private final GameDao gameDao;
     private final PieceDao pieceDao;
 
@@ -30,6 +31,17 @@ public class DBService {
         return gameId;
     }
 
+    public Board loadGame() {
+        int gameId = gameDao.findLatestGameId();
+        Turn turn = findTurn(gameId);
+        Map<Location, Piece> board = findBoard(gameId);
+        return new Board(board, turn);
+    }
+
+    public boolean isLatestGame() {
+        return gameDao.findLatestGameId() != NO_LATEST_GAME;
+    }
+
     private void savePieces(int gameId, Map<Location, Piece> board) {
         List<PieceDto> pieces = board.entrySet().stream()
                 .map(entry -> PieceDto.of(entry.getValue(), entry.getKey()))
@@ -37,17 +49,17 @@ public class DBService {
         pieces.forEach(piece -> pieceDao.addPiece(gameId, piece));
     }
 
-    public Board loadGame(int gameId) {
-        Turn turn = findTurn(gameId);
-        return new Board();
-    }
-
     private Turn findTurn(int gameId) {
         return gameDao.findTurn(gameId);
     }
 
     private Map<Location, Piece> findBoard(int gameId) {
-        return new HashMap<>();
+        List<PieceDto> pieces = pieceDao.findAllPiecesByGameId(gameId);
+        Map<Location, Piece> board = new HashMap<>();
+        for (PieceDto pieceDto : pieces) {
+            board.put(pieceDto.makeLocation(), pieceDto.makePiece());
+        }
+        return board;
     }
 
 

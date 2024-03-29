@@ -56,8 +56,16 @@ public class GameController {
     }
 
     private void createBoard() {
-        board = new Board();
+        findBoardIfExist();
         OUTPUT_VIEW.printBoard(board.getBoard());
+    }
+
+    private void findBoardIfExist() {
+        if (DB_SERVICE.isLatestGame()) {
+            board = DB_SERVICE.loadGame();
+            return;
+        }
+        board = new Board();
     }
 
     private void calculateStatus() {
