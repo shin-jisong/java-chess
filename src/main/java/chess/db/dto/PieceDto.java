@@ -1,6 +1,5 @@
 package chess.db.dto;
 
-import chess.domain.location.Column;
 import chess.domain.location.Location;
 import chess.domain.location.Row;
 import chess.domain.piece.Bishop;
@@ -14,7 +13,6 @@ import chess.domain.piece.PieceType;
 import chess.domain.piece.Queen;
 import chess.domain.piece.Rook;
 import chess.domain.piece.WhitePawn;
-import java.util.Objects;
 
 public record PieceDto(
         String pieceType,

@@ -101,9 +101,10 @@ rnbqkbnr
 ```
 
 ## 프로그램 실행 방법
+
 1. 도커를 실행한다.
     - docker 폴더 안 docker-compose.yml 파일이 있는 경로에서, docker 명령어로 Server를 실행한다. <br>
     - `docker-compose -p chess up -d`
 2. source 폴더 안 sql을 통해 테이블을 생성한다.
-   - game 테이블을 먼저 생성한 후, piece 테이블을 생성해야 한다.
+    - game 테이블을 먼저 생성한 후, piece 테이블을 생성해야 한다.
     

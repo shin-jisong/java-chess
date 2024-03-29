@@ -5,7 +5,7 @@ import chess.domain.board.Route;
 public class WhitePawn extends Pawn {
     private static final boolean INITIAL_MOVED = false;
 
-    public WhitePawn () {
+    public WhitePawn() {
         super(Color.WHITE, INITIAL_MOVED);
     }
 

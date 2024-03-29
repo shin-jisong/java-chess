@@ -12,6 +12,7 @@ public class GameController {
     private static final InputView INPUT_VIEW = new InputView();
     private static final OutputView OUTPUT_VIEW = new OutputView();
     private static final ChessDBService DB_SERVICE = new ChessDBService(new ChessDBConnector());
+
     private Board board = null;
 
     public void run() {

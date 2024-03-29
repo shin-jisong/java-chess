@@ -8,7 +8,7 @@ import java.util.Map;
 public class FakeGameDao implements GameDao {
     private final Map<Integer, Turn> GAME = new HashMap<>();
 
-     {
+    {
         GAME.put(1, Turn.WHITE);
         GAME.put(2, Turn.BLACK);
     }
@@ -22,9 +22,9 @@ public class FakeGameDao implements GameDao {
 
     @Override
     public int findLatestGameId() {
-         if (GAME.isEmpty()) {
-             return -1;
-         }
+        if (GAME.isEmpty()) {
+            return -1;
+        }
         return GAME.size();
     }
 

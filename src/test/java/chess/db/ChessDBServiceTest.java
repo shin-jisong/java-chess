@@ -8,7 +8,6 @@ import chess.domain.piece.Color;
 import chess.domain.piece.PieceType;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -34,8 +33,10 @@ class ChessDBServiceTest {
 
         org.junit.jupiter.api.Assertions.assertAll(
                 () -> Assertions.assertThat(loadBoard.getTurn()).isEqualTo(board.getTurn()),
-                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("A1")).getPieceType()).isEqualTo(PieceType.PAWN),
-                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("A1")).getColor()).isEqualTo(Color.BLACK)
+                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("A1")).getPieceType())
+                        .isEqualTo(PieceType.PAWN),
+                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("A1")).getColor())
+                        .isEqualTo(Color.BLACK)
         );
     }
 
@@ -46,8 +47,10 @@ class ChessDBServiceTest {
 
         org.junit.jupiter.api.Assertions.assertAll(
                 () -> Assertions.assertThat(loadBoard.getTurn()).isEqualTo(Turn.BLACK),
-                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("B4")).getPieceType()).isEqualTo(PieceType.QUEEN),
-                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("B4")).getColor()).isEqualTo(Color.BLACK)
+                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("B4")).getPieceType())
+                        .isEqualTo(PieceType.QUEEN),
+                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("B4")).getColor())
+                        .isEqualTo(Color.BLACK)
         );
     }
 
@@ -59,8 +62,10 @@ class ChessDBServiceTest {
 
         org.junit.jupiter.api.Assertions.assertAll(
                 () -> Assertions.assertThat(loadBoard.getTurn()).isEqualTo(Turn.WHITE),
-                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("B4")).getPieceType()).isEqualTo(PieceType.KING),
-                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("B4")).getColor()).isEqualTo(Color.WHITE)
+                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("B4")).getPieceType())
+                        .isEqualTo(PieceType.KING),
+                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("B4")).getColor())
+                        .isEqualTo(Color.WHITE)
         );
     }
 

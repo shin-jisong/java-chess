@@ -3,7 +3,6 @@ package chess.db;
 import chess.db.dao.PieceDao;
 import chess.db.dto.PieceDto;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
