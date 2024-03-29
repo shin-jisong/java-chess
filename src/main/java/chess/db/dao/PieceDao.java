@@ -1,24 +1,19 @@
 package chess.db.dao;
 
-import chess.db.DBConnector;
+import chess.db.ChessDBConnector;
 import chess.db.dto.PieceDto;
-import chess.domain.board.game.Turn;
-import chess.domain.location.Location;
-import chess.domain.piece.Piece;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class PieceDao {
     private static final String TABLE = "piece";
-    private final DBConnector connector;
+    private final ChessDBConnector connector;
 
-    public PieceDao(DBConnector connector) {
+    public PieceDao(ChessDBConnector connector) {
         this.connector = connector;
     }
 

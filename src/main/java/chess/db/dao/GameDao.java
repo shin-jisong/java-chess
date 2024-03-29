@@ -1,21 +1,20 @@
 package chess.db.dao;
 
-import chess.db.DBConnector;
+import chess.db.ChessDBConnector;
 import chess.domain.board.game.Turn;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.function.Supplier;
 
 public class GameDao {
     private static final String TABLE = "game";
 
-    private final DBConnector connector;
+    private final ChessDBConnector connector;
 
-    public GameDao(DBConnector dbConnector) {
-        this.connector = dbConnector;
+    public GameDao(ChessDBConnector chessDbConnector) {
+        this.connector = chessDbConnector;
     }
 
     public int addGame(Turn turn) {

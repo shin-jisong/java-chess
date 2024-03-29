@@ -7,19 +7,17 @@ import chess.domain.board.Board;
 import chess.domain.board.game.Turn;
 import chess.domain.location.Location;
 import chess.domain.piece.Piece;
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
-public class DBService {
+public class ChessDBService {
     private static final int NO_LATEST_GAME = -1;
     private final GameDao gameDao;
     private final PieceDao pieceDao;
 
 
-    public DBService(DBConnector connector) {
+    public ChessDBService(ChessDBConnector connector) {
         this.gameDao = new GameDao(connector);
         this.pieceDao = new PieceDao(connector);
     }

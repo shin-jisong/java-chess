@@ -4,11 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
-public class DBConnector {
+public class ChessDBConnector {
     private static final String SERVER = "localhost:13306";
     private static final String OPTION = "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
     private static final String USERNAME = "root";
@@ -16,11 +12,11 @@ public class DBConnector {
 
     private final String database;
 
-    DBConnector(String database) {
+    ChessDBConnector(String database) {
         this.database = database;
     }
 
-    public DBConnector() {
+    public ChessDBConnector() {
         this("chess");
     }
 

@@ -1,7 +1,7 @@
 package chess.controller;
 
-import chess.db.DBConnector;
-import chess.db.DBService;
+import chess.db.ChessDBConnector;
+import chess.db.ChessDBService;
 import chess.domain.board.Board;
 import chess.domain.board.game.GameStatus;
 import chess.domain.board.game.MoveCommand;
@@ -11,7 +11,7 @@ import chess.view.OutputView;
 public class GameController {
     private static final InputView INPUT_VIEW = new InputView();
     private static final OutputView OUTPUT_VIEW = new OutputView();
-    private static final DBService DB_SERVICE = new DBService(new DBConnector());
+    private static final ChessDBService DB_SERVICE = new ChessDBService(new ChessDBConnector());
     private Board board = null;
 
     public void run() {
