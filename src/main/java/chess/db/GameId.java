@@ -3,14 +3,14 @@ package chess.db;
 import java.util.Objects;
 
 public class GameId {
-    private final int value;
+    private final long value;
 
-    public GameId(int gameId) {
+    public GameId(long gameId) {
         validate(gameId);
         this.value = gameId;
     }
 
-    private void validate(int gameId) {
+    private void validate(long gameId) {
         if (gameId < 1) {
             throw new IllegalArgumentException("유효하지 않은 게임입니다.");
         }
@@ -33,7 +33,7 @@ public class GameId {
         return Objects.hash(value);
     }
 
-    public int getValue() {
+    public long getValue() {
         return value;
     }
 }

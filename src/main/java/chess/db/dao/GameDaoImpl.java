@@ -58,7 +58,7 @@ public class GameDaoImpl implements GameDao {
         final String query = String.format("SELECT turn FROM %s WHERE `game_id` = ?", TABLE);
         try (final Connection connection = connector.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, gameId.getValue());
+            preparedStatement.setLong(1, gameId.getValue());
             final ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 String turn = resultSet.getString("turn");
@@ -75,7 +75,7 @@ public class GameDaoImpl implements GameDao {
         final String query = String.format("DELETE FROM %s WHERE `game_id` = ?", TABLE);
         try (final Connection connection = connector.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement(query);) {
-            preparedStatement.setInt(1, gameId.getValue());
+            preparedStatement.setLong(1, gameId.getValue());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -7,11 +7,11 @@ public abstract class Pawn extends Piece {
     private static final int NORMAL_MOVE_DISTANCE = 1;
     private static final int ONE_DIRECTION = 1;
 
-    private boolean moved;
+    private boolean isMoved;
 
-    protected Pawn(Color color, boolean moved) {
+    protected Pawn(Color color, boolean isMoved) {
         super(color, PieceType.PAWN);
-        this.moved = moved;
+        this.isMoved = isMoved;
     }
 
     abstract boolean isBackward(Route route);
@@ -38,7 +38,7 @@ public abstract class Pawn extends Piece {
 
     private void checkMoved(boolean movable) {
         if (movable) {
-            moved = true;
+            isMoved = true;
         }
     }
 
@@ -50,6 +50,6 @@ public abstract class Pawn extends Piece {
     }
 
     private boolean isFirstMove() {
-        return !moved;
+        return !isMoved;
     }
 }

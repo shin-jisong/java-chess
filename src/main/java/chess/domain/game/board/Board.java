@@ -71,11 +71,6 @@ public class Board {
         columnCount.put(column, columnCount.getOrDefault(column, 0) + 1);
     }
 
-    private boolean isPieceColorMatching(Color color, Piece piece) {
-        return color == Color.BLACK && piece.isBlack() || color == Color.WHITE && !piece.isBlack();
-    }
-
-
     private Route createPath(MoveCommand moveCommand) {
         List<Direction> directions = DirectionFinder.find(moveCommand.getSource(), moveCommand.getTarget());
         List<SquareState> squareStates = createPathState(moveCommand.getSource(), directions);

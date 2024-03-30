@@ -34,9 +34,8 @@ public class Score {
     }
 
     private double calculateScore(Board board, Color color) {
-        List<Piece> pieces = board.getPieces();
         int deductionPawnCount = board.countSameColumnPawn(color);
-        double score = pieces.stream()
+        double score = board.getPieces().stream()
                 .filter(piece -> piece.isBlack() == color.isBlack())
                 .mapToDouble(this::findScore)
                 .sum();

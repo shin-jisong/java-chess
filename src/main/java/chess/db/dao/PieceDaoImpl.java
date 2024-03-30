@@ -23,7 +23,7 @@ public class PieceDaoImpl implements PieceDao {
         final String query = String.format("INSERT INTO %s VALUES(?, ?, ?, ?, ?)", TABLE);
         try (final Connection connection = connector.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, gameId.getValue());
+            preparedStatement.setLong(1, gameId.getValue());
             preparedStatement.setString(2, pieceDto.pieceType());
             preparedStatement.setString(3, pieceDto.color());
             preparedStatement.setString(4, pieceDto.column());
@@ -39,7 +39,7 @@ public class PieceDaoImpl implements PieceDao {
         final String query = String.format("SELECT * FROM %s WHERE `game_id` = ?", TABLE);
         try (final Connection connection = connector.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, gameId.getValue());
+            statement.setLong(1, gameId.getValue());
             ResultSet resultSet = statement.executeQuery();
 
             List<PieceDto> pieces = new ArrayList<>();
@@ -61,7 +61,7 @@ public class PieceDaoImpl implements PieceDao {
         final String query = String.format("DELETE FROM %s WHERE `game_id` = ?", TABLE);
         try (final Connection connection = connector.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement(query);) {
-            preparedStatement.setInt(1, gameId.getValue());
+            preparedStatement.setLong(1, gameId.getValue());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
