@@ -1,6 +1,6 @@
 package chess.domain.board;
 
-import chess.domain.board.game.Turn;
+import chess.domain.game.Turn;
 import chess.domain.piece.Bishop;
 import chess.domain.piece.Color;
 import org.assertj.core.api.Assertions;

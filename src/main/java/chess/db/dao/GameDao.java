@@ -1,7 +1,7 @@
 package chess.db.dao;
 
 import chess.db.GameId;
-import chess.domain.board.game.Turn;
+import chess.domain.game.Turn;
 
 public interface GameDao {
     GameId addGame(Turn turn);

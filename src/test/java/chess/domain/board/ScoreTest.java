@@ -1,6 +1,6 @@
 package chess.domain.board;
 
-import chess.domain.board.game.Score;
+import chess.domain.game.Score;
 import chess.domain.piece.Bishop;
 import chess.domain.piece.BlackPawn;
 import chess.domain.piece.Color;

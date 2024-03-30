@@ -1,6 +1,6 @@
 package chess.domain.location;
 
-import chess.domain.board.Direction;
+import chess.domain.game.board.Direction;
 import java.util.Arrays;
 import java.util.List;
 

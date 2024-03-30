@@ -1,6 +1,6 @@
 package chess.domain.piece;
 
-import chess.domain.board.Route;
+import chess.domain.game.board.Route;
 
 public class King extends Piece {
     private static final int MAX_MOVE_DISTANCE = 1;

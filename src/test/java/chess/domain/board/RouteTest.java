@@ -3,6 +3,9 @@ package chess.domain.board;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+import chess.domain.game.board.Direction;
+import chess.domain.game.board.Route;
+import chess.domain.game.board.SquareState;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

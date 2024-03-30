@@ -1,6 +1,6 @@
 package chess.domain.piece;
 
-import chess.domain.board.Route;
+import chess.domain.game.board.Route;
 
 public abstract class Pawn extends Piece {
     private static final int INIT_MOVE_DISTANCE = 2;

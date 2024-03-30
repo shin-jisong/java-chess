@@ -2,9 +2,9 @@ package chess.domain.piece;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import chess.domain.board.Direction;
-import chess.domain.board.Route;
-import chess.domain.board.SquareState;
+import chess.domain.game.board.Direction;
+import chess.domain.game.board.Route;
+import chess.domain.game.board.SquareState;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

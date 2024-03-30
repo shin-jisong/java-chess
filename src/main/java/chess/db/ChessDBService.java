@@ -5,8 +5,9 @@ import chess.db.dao.GameDaoImpl;
 import chess.db.dao.PieceDao;
 import chess.db.dao.PieceDaoImpl;
 import chess.db.dto.PieceDto;
-import chess.domain.board.Board;
-import chess.domain.board.game.Turn;
+import chess.domain.game.Game;
+import chess.domain.game.board.Board;
+import chess.domain.game.Turn;
 import chess.domain.location.Location;
 import chess.domain.piece.Piece;
 import java.util.HashMap;
@@ -28,16 +29,16 @@ public class ChessDBService {
         this.pieceDao = pieceDao;
     }
 
-    public void saveGame(Board board) {
-        GameId gameId = gameDao.addGame(board.getTurn());
-        savePieces(gameId, board.getBoard());
+    public void saveGame(Game game) {
+        GameId gameId = gameDao.addGame(game.getTurn());
+        savePieces(gameId, game.getBoard());
     }
 
-    public Board loadGame() {
+    public Game loadGame() {
         GameId gameId = gameDao.findLatestGameId();
         Turn turn = findTurn(gameId);
         Map<Location, Piece> board = findBoard(gameId);
-        return new Board(board, turn);
+        return new Game(board, turn);
     }
 
     public void deleteGame() {

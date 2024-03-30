@@ -1,8 +1,7 @@
 package chess.db;
 
 import chess.db.dao.GameDao;
-import chess.domain.board.game.Turn;
-import java.util.HashMap;
+import chess.domain.game.Turn;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

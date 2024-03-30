@@ -1,6 +1,6 @@
 package chess.domain.piece;
 
-import chess.domain.board.Route;
+import chess.domain.game.board.Route;
 
 public class BlackPawn extends Pawn {
     private static final boolean INITIAL_MOVED = false;

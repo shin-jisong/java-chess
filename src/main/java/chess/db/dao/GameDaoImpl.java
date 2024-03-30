@@ -2,7 +2,7 @@ package chess.db.dao;
 
 import chess.db.ChessDBConnector;
 import chess.db.GameId;
-import chess.domain.board.game.Turn;
+import chess.domain.game.Turn;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

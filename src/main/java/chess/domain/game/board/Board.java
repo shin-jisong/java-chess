@@ -1,46 +1,38 @@
-package chess.domain.board;
+package chess.domain.game.board;
 
-import static chess.domain.board.BoardInitializer.initialBoard;
+import static chess.domain.game.board.BoardInitializer.initialBoard;
 
-import chess.domain.board.game.GameStatus;
-import chess.domain.board.game.MoveCommand;
-import chess.domain.board.game.Score;
-import chess.domain.board.game.Turn;
+import chess.domain.game.MoveCommand;
+import chess.domain.game.Turn;
 import chess.domain.location.Column;
 import chess.domain.location.Location;
+import chess.domain.piece.BlackPawn;
 import chess.domain.piece.Color;
+import chess.domain.piece.King;
+import chess.domain.piece.Pawn;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
+import chess.domain.piece.WhitePawn;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Board {
     private final Map<Location, Piece> board;
-    private Turn turn;
 
     public Board() {
         this.board = initialBoard();
-        this.turn = Turn.WHITE;
     }
 
-    public Board(Map<Location, Piece> board, Turn turn) {
+    public Board(Map<Location, Piece> board) {
         this.board = board;
-        this.turn = turn;
     }
-
-    public GameStatus proceedTurn(MoveCommand moveCommand) {
+    public void tryMove(MoveCommand moveCommand, Turn turn) {
         validatePieceAtLocation(moveCommand.getSource());
         Piece sourcePiece = board.get(moveCommand.getSource());
         Piece targetPiece = board.get(moveCommand.getTarget());
-        validateMatchPiece(sourcePiece);
-        tryMove(moveCommand, sourcePiece);
-        return checkTurn(targetPiece);
-    }
-
-    private void tryMove(MoveCommand moveCommand, Piece sourcePiece) {
+        validateMatchPiece(sourcePiece, turn);
         Route route = createPath(moveCommand);
         if (sourcePiece.canMove(route)) {
             move(moveCommand, sourcePiece);
@@ -54,45 +46,24 @@ public class Board {
         board.put(moveCommand.getTarget(), movingPiece);
     }
 
-    private GameStatus checkTurn(Piece targetPiece) {
-        if (targetPiece != null && targetPiece.equalPieceType(PieceType.KING)) {
-            turn = turn.stop();
-            return checkWinTeam(targetPiece);
-        }
-        turn = turn.next();
-        return GameStatus.IN_PROGRESS;
-    }
-
-    private GameStatus checkWinTeam(Piece targetPiece) {
-        if (targetPiece.isBlack()) {
-            return GameStatus.WHITE_WIN;
-        }
-        return GameStatus.BLACK_WIN;
-    }
-
-    public double calculateBlackScore() {
-        List<Piece> pieces = board.values().stream().toList();
-        int deductionPawnCount = countSameColumnPawn(Color.BLACK);
-        return Score.calculateBlack(pieces, deductionPawnCount);
-    }
-
-    public double calculateWhiteScore() {
-        List<Piece> pieces = board.values().stream().toList();
-        int deductionPawnCount = countSameColumnPawn(Color.WHITE);
-        return Score.calculateWhite(pieces, deductionPawnCount);
-    }
-
-    private int countSameColumnPawn(Color color) {
+    public int countSameColumnPawn(Color color) {
+        Pawn pawn = makeMatchPawn(color);
         Map<Column, Integer> columnCount = new HashMap<>();
         board.entrySet().stream()
-                .filter(entry -> entry.getValue()
-                        .equalPieceType(PieceType.PAWN) && isPieceColorMatching(color, entry.getValue()))
+                .filter(entry -> entry.getValue().equals(pawn))
                 .map(Map.Entry::getKey)
                 .forEach(location -> countPawnColumn(location, columnCount));
         return columnCount.values().stream()
                 .filter(integer -> integer > 1)
                 .mapToInt(i -> i)
                 .sum();
+    }
+
+    private Pawn makeMatchPawn(Color color) {
+        if (color.equals(Color.BLACK)) {
+            return new BlackPawn();
+        }
+        return new WhitePawn();
     }
 
     private void countPawnColumn(Location location, Map<Column, Integer> columnCount) {
@@ -133,12 +104,7 @@ public class Board {
         }
         return SquareState.ENEMY;
     }
-
-    public boolean isFinish() {
-        return turn.isFinish();
-    }
-
-    private void validateMatchPiece(Piece sourcePiece) {
+    private void validateMatchPiece(Piece sourcePiece, Turn turn) {
         if (turn.isMatchPiece(sourcePiece)) {
             return;
         }
@@ -151,11 +117,19 @@ public class Board {
         }
     }
 
-    public Map<Location, Piece> getBoard() {
-        return Collections.unmodifiableMap(board);
+
+    public int countKing() {
+        return (int) board.values()
+                .stream()
+                .filter(piece -> piece.equals(new King(Color.WHITE)) || piece.equals(new King(Color.BLACK)))
+                .count();
     }
 
-    public Turn getTurn() {
-        return turn;
+    public Map<Location, Piece> getBoard() {
+        return board;
+    }
+
+    public List<Piece> getPieces() {
+        return board.values().stream().toList();
     }
 }

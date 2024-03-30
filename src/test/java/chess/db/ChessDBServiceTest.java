@@ -1,7 +1,8 @@
 package chess.db;
 
-import chess.domain.board.Board;
-import chess.domain.board.game.Turn;
+import chess.domain.game.Game;
+import chess.domain.game.board.Board;
+import chess.domain.game.Turn;
 import chess.domain.location.Location;
 import chess.domain.piece.BlackPawn;
 import chess.domain.piece.Color;
@@ -24,18 +25,18 @@ class ChessDBServiceTest {
     @DisplayName("게임을 저장할 수 있다.")
     @Test
     void saveGameTest() {
-        Board board = new Board(
+        Game game = new Game(
                 Map.of(Location.of("A1"), new BlackPawn()),
                 Turn.BLACK
         );
-        dbService.saveGame(board);
-        Board loadBoard = dbService.loadGame();
+        dbService.saveGame(game);
+        Game loadGame = dbService.loadGame();
 
         org.junit.jupiter.api.Assertions.assertAll(
-                () -> Assertions.assertThat(loadBoard.getTurn()).isEqualTo(board.getTurn()),
-                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("A1")).getPieceType())
+                () -> Assertions.assertThat(loadGame.getTurn()).isEqualTo(game.getTurn()),
+                () -> Assertions.assertThat(loadGame.getBoard().get(Location.of("A1")).getPieceType())
                         .isEqualTo(PieceType.PAWN),
-                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("A1")).getColor())
+                () -> Assertions.assertThat(loadGame.getBoard().get(Location.of("A1")).getColor())
                         .isEqualTo(Color.BLACK)
         );
     }
@@ -43,13 +44,13 @@ class ChessDBServiceTest {
     @DisplayName("게임을 불러올 수 있다.")
     @Test
     void loadGameTest() {
-        Board loadBoard = dbService.loadGame();
+        Game loadGame = dbService.loadGame();
 
         org.junit.jupiter.api.Assertions.assertAll(
-                () -> Assertions.assertThat(loadBoard.getTurn()).isEqualTo(Turn.BLACK),
-                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("B4")).getPieceType())
+                () -> Assertions.assertThat(loadGame.getTurn()).isEqualTo(Turn.BLACK),
+                () -> Assertions.assertThat(loadGame.getBoard().get(Location.of("B4")).getPieceType())
                         .isEqualTo(PieceType.QUEEN),
-                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("B4")).getColor())
+                () -> Assertions.assertThat(loadGame.getBoard().get(Location.of("B4")).getColor())
                         .isEqualTo(Color.BLACK)
         );
     }
@@ -58,13 +59,13 @@ class ChessDBServiceTest {
     @Test
     void deleteGameTest() {
         dbService.deleteGame();
-        Board loadBoard = dbService.loadGame();
+        Game loadGame = dbService.loadGame();
 
         org.junit.jupiter.api.Assertions.assertAll(
-                () -> Assertions.assertThat(loadBoard.getTurn()).isEqualTo(Turn.WHITE),
-                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("B4")).getPieceType())
+                () -> Assertions.assertThat(loadGame.getTurn()).isEqualTo(Turn.WHITE),
+                () -> Assertions.assertThat(loadGame.getBoard().get(Location.of("B4")).getPieceType())
                         .isEqualTo(PieceType.KING),
-                () -> Assertions.assertThat(loadBoard.getBoard().get(Location.of("B4")).getColor())
+                () -> Assertions.assertThat(loadGame.getBoard().get(Location.of("B4")).getColor())
                         .isEqualTo(Color.WHITE)
         );
     }

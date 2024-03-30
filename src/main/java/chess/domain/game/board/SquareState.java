@@ -1,4 +1,4 @@
-package chess.domain.board;
+package chess.domain.game.board;
 
 public enum SquareState {
     EMPTY, ALLY, ENEMY;

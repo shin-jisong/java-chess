@@ -2,9 +2,10 @@ package chess.controller;
 
 import chess.db.ChessDBConnector;
 import chess.db.ChessDBService;
-import chess.domain.board.Board;
-import chess.domain.board.game.GameStatus;
-import chess.domain.board.game.MoveCommand;
+import chess.domain.game.Game;
+import chess.domain.game.board.Board;
+import chess.domain.game.GameStatus;
+import chess.domain.game.MoveCommand;
 import chess.view.InputView;
 import chess.view.OutputView;
 
@@ -13,7 +14,7 @@ public class GameController {
     private static final OutputView OUTPUT_VIEW = new OutputView();
     private static final ChessDBService DB_SERVICE = new ChessDBService(new ChessDBConnector());
 
-    private Board board = null;
+    private Game game = null;
 
     public void run() {
         OUTPUT_VIEW.printGameStart();
@@ -39,14 +40,14 @@ public class GameController {
     }
 
     private void checkSaveGame() {
-        if (board != null && !board.isFinish()) {
+        if (game != null && !game.isFinish()) {
             saveGameOrNot();
         }
     }
 
     private void saveGameOrNot() {
         if (INPUT_VIEW.readFinishSave()) {
-            DB_SERVICE.saveGame(board);
+            DB_SERVICE.saveGame(game);
             OUTPUT_VIEW.printSave();
             return;
         }
@@ -67,21 +68,21 @@ public class GameController {
 
     private void createBoard() {
         findBoardIfExist();
-        OUTPUT_VIEW.printBoard(board.getBoard());
+        OUTPUT_VIEW.printBoard(game.getBoard());
     }
 
     private void findBoardIfExist() {
         if (DB_SERVICE.isLatestGame()) {
             loadBoardOrNot();
         }
-        if (board == null) {
-            board = new Board();
+        if (game == null) {
+            game = new Game();
         }
     }
 
     private void loadBoardOrNot() {
         if (INPUT_VIEW.readLoadGame()) {
-            board = DB_SERVICE.loadGame();
+            game = DB_SERVICE.loadGame();
             DB_SERVICE.deleteGame();
             OUTPUT_VIEW.printLoad();
             return;
@@ -92,8 +93,8 @@ public class GameController {
 
     private void calculateStatus() {
         checkBoard();
-        double blackScore = board.calculateBlackScore();
-        double whiteScore = board.calculateWhiteScore();
+        double blackScore = game.calculateBlackScore();
+        double whiteScore = game.calculateWhiteScore();
         OUTPUT_VIEW.printStatus(blackScore, whiteScore);
     }
 
@@ -101,13 +102,13 @@ public class GameController {
         checkBoard();
         String[] commands = command.split(InputView.DELIMITER);
         MoveCommand moveCommand = new MoveCommand(commands[1], commands[2]);
-        GameStatus gameStatus = board.proceedTurn(moveCommand);
-        OUTPUT_VIEW.printBoard(board.getBoard());
+        GameStatus gameStatus = game.proceedTurn(moveCommand);
+        OUTPUT_VIEW.printBoard(game.getBoard());
         checkFinish(gameStatus);
     }
 
     private boolean isBoardFinish() {
-        return board != null && board.isFinish();
+        return game != null && game.isFinish();
     }
 
     private void checkFinish(GameStatus gameStatus) {
@@ -118,7 +119,7 @@ public class GameController {
     }
 
     private void checkBoard() {
-        if (board == null) {
+        if (game == null) {
             throw new IllegalStateException("아직 게임이 시작되지 않았습니다.");
         }
     }
