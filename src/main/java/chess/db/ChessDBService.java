@@ -6,7 +6,6 @@ import chess.db.dao.PieceDao;
 import chess.db.dao.PieceDaoImpl;
 import chess.db.dto.PieceDto;
 import chess.domain.game.Game;
-import chess.domain.game.board.Board;
 import chess.domain.game.Turn;
 import chess.domain.location.Location;
 import chess.domain.piece.Piece;

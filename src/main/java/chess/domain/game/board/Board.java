@@ -11,7 +11,6 @@ import chess.domain.piece.Color;
 import chess.domain.piece.King;
 import chess.domain.piece.Pawn;
 import chess.domain.piece.Piece;
-import chess.domain.piece.PieceType;
 import chess.domain.piece.WhitePawn;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +27,7 @@ public class Board {
     public Board(Map<Location, Piece> board) {
         this.board = board;
     }
+
     public void tryMove(MoveCommand moveCommand, Turn turn) {
         validatePieceAtLocation(moveCommand.getSource());
         Piece sourcePiece = board.get(moveCommand.getSource());
@@ -99,6 +99,7 @@ public class Board {
         }
         return SquareState.ENEMY;
     }
+
     private void validateMatchPiece(Piece sourcePiece, Turn turn) {
         if (turn.isMatchPiece(sourcePiece)) {
             return;

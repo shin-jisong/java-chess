@@ -3,10 +3,9 @@ package chess.controller;
 import chess.db.ChessDBConnector;
 import chess.db.ChessDBService;
 import chess.domain.game.Game;
-import chess.domain.game.Score;
-import chess.domain.game.board.Board;
 import chess.domain.game.GameStatus;
 import chess.domain.game.MoveCommand;
+import chess.domain.game.Score;
 import chess.view.InputView;
 import chess.view.OutputView;
 

@@ -1,7 +1,6 @@
 package chess.db;
 
 import chess.domain.game.Game;
-import chess.domain.game.board.Board;
 import chess.domain.game.Turn;
 import chess.domain.location.Location;
 import chess.domain.piece.BlackPawn;

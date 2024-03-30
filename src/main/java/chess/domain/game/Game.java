@@ -2,10 +2,8 @@ package chess.domain.game;
 
 import chess.domain.game.board.Board;
 import chess.domain.location.Location;
-import chess.domain.piece.Color;
 import chess.domain.piece.Piece;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 public class Game {
