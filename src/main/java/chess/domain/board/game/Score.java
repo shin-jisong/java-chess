@@ -22,7 +22,7 @@ public class Score {
                 .filter(Piece::isBlack)
                 .mapToDouble(Score::findScore)
                 .sum();
-        return score - PAWN_DEDUCTION_SCORE * deductionPawnCount;
+        return score - (PAWN_DEDUCTION_SCORE * deductionPawnCount);
     }
 
     public static double calculateWhite(List<Piece> pieces, int deductionPawnCount) {
@@ -30,7 +30,7 @@ public class Score {
                 .filter(piece -> !piece.isBlack())
                 .mapToDouble(Score::findScore)
                 .sum();
-        return score - PAWN_DEDUCTION_SCORE * deductionPawnCount;
+        return score - (PAWN_DEDUCTION_SCORE * deductionPawnCount);
     }
 
     private static double findScore(Piece piece) {
