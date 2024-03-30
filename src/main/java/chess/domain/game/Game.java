@@ -49,14 +49,8 @@ public class Game {
         return GameStatus.BLACK_WIN;
     }
 
-    public double calculateBlackScore() {
-        int deductionPawnCount = board.countSameColumnPawn(Color.BLACK);
-        return Score.calculateBlack(board.getPieces(), deductionPawnCount);
-    }
-
-    public double calculateWhiteScore() {
-        int deductionPawnCount = board.countSameColumnPawn(Color.WHITE);
-        return Score.calculateWhite(board.getPieces(), deductionPawnCount);
+    public Score calculateScore() {
+        return new Score(board);
     }
 
     public boolean isFinish() {

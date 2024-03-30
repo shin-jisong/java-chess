@@ -1,6 +1,7 @@
 package chess.view;
 
 import chess.domain.game.GameStatus;
+import chess.domain.game.Score;
 import chess.domain.location.Column;
 import chess.domain.location.Location;
 import chess.domain.location.Row;
@@ -50,14 +51,16 @@ public class OutputView {
                 .forEach(System.out::print);
     }
 
-    public void printStatus(double blackScore, double whiteScore) {
+    public void printStatus(Score score) {
         System.out.println("현재 각 진영의 점수입니다.");
-        System.out.println("흑팀: " + blackScore);
-        System.out.println("백팀: " + whiteScore);
-        printOutcome(blackScore, whiteScore);
+        System.out.println("흑팀: " + score.getBlackScore());
+        System.out.println("백팀: " + score.getWhiteScore());
+        printOutcome(score);
     }
 
-    private void printOutcome(double blackScore, double whiteScore) {
+    private void printOutcome(Score score) {
+        double blackScore = score.getBlackScore();
+        double whiteScore = score.getWhiteScore();
         if (blackScore > whiteScore) {
             System.out.println("현재 흑팀이 이기고 있습니다.");
             return;

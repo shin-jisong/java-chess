@@ -1,6 +1,7 @@
 package chess.domain.board;
 
 import chess.domain.game.Score;
+import chess.domain.game.board.Board;
 import chess.domain.piece.Bishop;
 import chess.domain.piece.BlackPawn;
 import chess.domain.piece.Color;
@@ -16,27 +17,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class ScoreTest {
-    private final List<Piece> pieces = List.of(
-            new Bishop(Color.BLACK),
-            new BlackPawn(),
-            new Knight(Color.BLACK),
-            new Rook(Color.BLACK),
-            new King(Color.WHITE),
-            new Queen(Color.WHITE),
-            new WhitePawn()
-    );
-
     @DisplayName("흑팀의 점수를 계산한다.")
     @Test
     void calculateBlackTest() {
-        Assertions.assertThat(Score.calculateBlack(pieces, 0)).isEqualTo(11.5);
+        Score score = new Score(new Board());
+        Assertions.assertThat(score.getBlackScore()).isEqualTo(38.0);
     }
 
     @DisplayName("백팀의 점수를 계산한다.")
     @Test
     void calculateWhiteTest() {
-        Assertions.assertThat(Score.calculateWhite(pieces, 0)).isEqualTo(10);
+        Score score = new Score(new Board());
+        Assertions.assertThat(score.getWhiteScore()).isEqualTo(38.0);
     }
-
 
 }

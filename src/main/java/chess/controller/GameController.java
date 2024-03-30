@@ -3,6 +3,7 @@ package chess.controller;
 import chess.db.ChessDBConnector;
 import chess.db.ChessDBService;
 import chess.domain.game.Game;
+import chess.domain.game.Score;
 import chess.domain.game.board.Board;
 import chess.domain.game.GameStatus;
 import chess.domain.game.MoveCommand;
@@ -93,9 +94,8 @@ public class GameController {
 
     private void calculateStatus() {
         checkBoard();
-        double blackScore = game.calculateBlackScore();
-        double whiteScore = game.calculateWhiteScore();
-        OUTPUT_VIEW.printStatus(blackScore, whiteScore);
+        Score score = game.calculateScore();
+        OUTPUT_VIEW.printStatus(score);
     }
 
     private void move(String command) {

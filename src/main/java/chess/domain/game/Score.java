@@ -1,5 +1,6 @@
 package chess.domain.game;
 
+import chess.domain.game.board.Board;
 import chess.domain.piece.Bishop;
 import chess.domain.piece.BlackPawn;
 import chess.domain.piece.Color;
@@ -24,27 +25,37 @@ public class Score {
     private static final Double PAWN_DEDUCTION_SCORE = 0.5;
     private static final Double ZERO_SCORE = 0.0;
 
-    public static double calculateBlack(List<Piece> pieces, int deductionPawnCount) {
+    private final double whiteScore;
+    private final double blackScore;
+
+    public Score(Board board) {
+        whiteScore = calculateScore(board, Color.WHITE);
+        blackScore = calculateScore(board, Color.BLACK);
+    }
+
+    private double calculateScore(Board board, Color color) {
+        List<Piece> pieces = board.getPieces();
+        int deductionPawnCount = board.countSameColumnPawn(color);
         double score = pieces.stream()
-                .filter(Piece::isBlack)
-                .mapToDouble(Score::findScore)
+                .filter(piece -> piece.isBlack() == color.isBlack())
+                .mapToDouble(this::findScore)
                 .sum();
         return score - (PAWN_DEDUCTION_SCORE * deductionPawnCount);
     }
 
-    public static double calculateWhite(List<Piece> pieces, int deductionPawnCount) {
-        double score = pieces.stream()
-                .filter(piece -> !piece.isBlack())
-                .mapToDouble(Score::findScore)
-                .sum();
-        return score - (PAWN_DEDUCTION_SCORE * deductionPawnCount);
-    }
-
-    private static double findScore(Piece piece) {
+    private double findScore(Piece piece) {
         return scoreCard.entrySet().stream()
                 .filter(entry -> piece.equals(entry.getKey()))
                 .mapToDouble(Map.Entry::getValue)
                 .findFirst()
                 .orElse(ZERO_SCORE);
+    }
+
+    public double getWhiteScore() {
+        return whiteScore;
+    }
+
+    public double getBlackScore() {
+        return blackScore;
     }
 }
