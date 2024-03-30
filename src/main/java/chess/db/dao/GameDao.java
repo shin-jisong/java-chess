@@ -1,13 +1,14 @@
 package chess.db.dao;
 
+import chess.db.GameId;
 import chess.domain.board.game.Turn;
 
 public interface GameDao {
-    int addGame(Turn turn);
+    GameId addGame(Turn turn);
 
-    int findLatestGameId();
+    GameId findLatestGameId();
 
-    Turn findTurn(int gameId);
+    Turn findTurn(GameId gameId);
 
-    void deleteGame(int gameId);
+    void deleteGame(GameId gameId);
 }

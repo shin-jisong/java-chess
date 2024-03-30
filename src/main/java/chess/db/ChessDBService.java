@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ChessDBService {
-    private static final int NO_LATEST_GAME = -1;
     private final GameDao gameDao;
     private final PieceDao pieceDao;
 
@@ -30,39 +29,39 @@ public class ChessDBService {
     }
 
     public void saveGame(Board board) {
-        int gameId = gameDao.addGame(board.getTurn());
+        GameId gameId = gameDao.addGame(board.getTurn());
         savePieces(gameId, board.getBoard());
     }
 
     public Board loadGame() {
-        int gameId = gameDao.findLatestGameId();
+        GameId gameId = gameDao.findLatestGameId();
         Turn turn = findTurn(gameId);
         Map<Location, Piece> board = findBoard(gameId);
         return new Board(board, turn);
     }
 
     public void deleteGame() {
-        int gameId = gameDao.findLatestGameId();
+        GameId gameId = gameDao.findLatestGameId();
         pieceDao.deletePieces(gameId);
         gameDao.deleteGame(gameId);
     }
 
     public boolean isLatestGame() {
-        return gameDao.findLatestGameId() != NO_LATEST_GAME;
+        return gameDao.findLatestGameId() != null;
     }
 
-    private void savePieces(int gameId, Map<Location, Piece> board) {
+    private void savePieces(GameId gameId, Map<Location, Piece> board) {
         List<PieceDto> pieces = board.entrySet().stream()
                 .map(entry -> PieceDto.of(entry.getValue(), entry.getKey()))
                 .toList();
         pieces.forEach(piece -> pieceDao.addPiece(gameId, piece));
     }
 
-    private Turn findTurn(int gameId) {
+    private Turn findTurn(GameId gameId) {
         return gameDao.findTurn(gameId);
     }
 
-    private Map<Location, Piece> findBoard(int gameId) {
+    private Map<Location, Piece> findBoard(GameId gameId) {
         List<PieceDto> pieces = pieceDao.findAllPiecesByGameId(gameId);
         Map<Location, Piece> board = new HashMap<>();
         for (PieceDto pieceDto : pieces) {

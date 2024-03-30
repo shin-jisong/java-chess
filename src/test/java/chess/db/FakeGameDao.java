@@ -3,38 +3,40 @@ package chess.db;
 import chess.db.dao.GameDao;
 import chess.domain.board.game.Turn;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FakeGameDao implements GameDao {
-    private final Map<Integer, Turn> GAME = new HashMap<>();
+    private final Map<GameId, Turn> GAME = new LinkedHashMap<>();
 
     {
-        GAME.put(1, Turn.WHITE);
-        GAME.put(2, Turn.BLACK);
+        GAME.put(new GameId(1), Turn.WHITE);
+        GAME.put(new GameId(2), Turn.BLACK);
     }
 
     @Override
-    public int addGame(Turn turn) {
+    public GameId addGame(Turn turn) {
         int autoIncrement = GAME.size() + 1;
-        GAME.put(autoIncrement, turn);
-        return autoIncrement;
+        GameId gameId = new GameId(autoIncrement);
+        GAME.put(gameId, turn);
+        return gameId;
     }
 
     @Override
-    public int findLatestGameId() {
+    public GameId findLatestGameId() {
         if (GAME.isEmpty()) {
-            return -1;
+            return null;
         }
-        return GAME.size();
+        return new GameId(GAME.size());
     }
 
     @Override
-    public Turn findTurn(int gameId) {
+    public Turn findTurn(GameId gameId) {
         return GAME.get(gameId);
     }
 
     @Override
-    public void deleteGame(int gameId) {
+    public void deleteGame(GameId gameId) {
         GAME.remove(gameId);
     }
 }

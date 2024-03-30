@@ -4,26 +4,27 @@ import chess.db.dao.PieceDao;
 import chess.db.dto.PieceDto;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class FakePieceDao implements PieceDao {
 
-    private final Map<Integer, List<PieceDto>> PIECE = new HashMap<>();
+    private final Map<GameId, List<PieceDto>> PIECE = new LinkedHashMap<>();;
 
     {
-        PIECE.put(1, List.of(
+        PIECE.put(new GameId(1), List.of(
                 new PieceDto("PAWN", "BLACK", "A", 7),
                 new PieceDto("KING", "WHITE", "B", 4)
         ));
-        PIECE.put(2, List.of(
+        PIECE.put(new GameId(2), List.of(
                 new PieceDto("PAWN", "WHITE", "A", 2),
                 new PieceDto("QUEEN", "BLACK", "B", 4)
         ));
     }
 
     @Override
-    public void addPiece(int gameId, PieceDto pieceDto) {
+    public void addPiece(GameId gameId, PieceDto pieceDto) {
         if (PIECE.containsKey(gameId)) {
             List<PieceDto> pieces = new ArrayList<>(PIECE.get(gameId));
             pieces.add(pieceDto);
@@ -34,7 +35,7 @@ public class FakePieceDao implements PieceDao {
     }
 
     @Override
-    public List<PieceDto> findAllPiecesByGameId(int gameId) {
+    public List<PieceDto> findAllPiecesByGameId(GameId gameId) {
         if (PIECE.containsKey(gameId)) {
             return PIECE.get(gameId);
         }
@@ -42,7 +43,7 @@ public class FakePieceDao implements PieceDao {
     }
 
     @Override
-    public void deletePieces(int gameId) {
+    public void deletePieces(GameId gameId) {
         PIECE.remove(gameId);
     }
 }
