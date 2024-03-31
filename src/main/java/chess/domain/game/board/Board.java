@@ -31,7 +31,6 @@ public class Board {
     public void tryMove(MoveCommand moveCommand, Turn turn) {
         validatePieceAtLocation(moveCommand.getSource());
         Piece sourcePiece = board.get(moveCommand.getSource());
-        Piece targetPiece = board.get(moveCommand.getTarget());
         validateMatchPiece(sourcePiece, turn);
         Route route = createPath(moveCommand);
         if (sourcePiece.canMove(route)) {
@@ -113,19 +112,19 @@ public class Board {
         }
     }
 
-
-    public int countKing() {
+    public int countPiece(Piece findPiece) {
         return (int) board.values()
                 .stream()
-                .filter(piece -> piece.equals(new King(Color.WHITE)) || piece.equals(new King(Color.BLACK)))
+                .filter(piece -> piece.equals(findPiece))
                 .count();
+    }
+
+
+    public int countKing() {
+        return countPiece(new King(Color.BLACK)) + countPiece(new King(Color.WHITE));
     }
 
     public Map<Location, Piece> getBoard() {
         return board;
-    }
-
-    public List<Piece> getPieces() {
-        return board.values().stream().toList();
     }
 }

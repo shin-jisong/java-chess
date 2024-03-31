@@ -21,7 +21,6 @@ public class Score {
                     new BlackPawn(), 1.0, new WhitePawn(), 1.0
             );
     private static final Double PAWN_DEDUCTION_SCORE = 0.5;
-    private static final Double ZERO_SCORE = 0.0;
 
     private final double whiteScore;
     private final double blackScore;
@@ -33,19 +32,11 @@ public class Score {
 
     private double calculateScore(Board board, Color color) {
         int deductionPawnCount = board.countSameColumnPawn(color);
-        double score = board.getPieces().stream()
+        double score = scoreCard.keySet().stream()
                 .filter(piece -> piece.isBlack() == color.isBlack())
-                .mapToDouble(this::findScore)
+                .mapToDouble(piece -> board.countPiece(piece) * scoreCard.get(piece))
                 .sum();
         return score - (PAWN_DEDUCTION_SCORE * deductionPawnCount);
-    }
-
-    private double findScore(Piece piece) {
-        return scoreCard.entrySet().stream()
-                .filter(entry -> piece.equals(entry.getKey()))
-                .mapToDouble(Map.Entry::getValue)
-                .findFirst()
-                .orElse(ZERO_SCORE);
     }
 
     public double getWhiteScore() {
