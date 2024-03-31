@@ -1,6 +1,6 @@
 package chess.domain.location;
 
-import chess.domain.board.Direction;
+import chess.domain.game.board.Direction;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

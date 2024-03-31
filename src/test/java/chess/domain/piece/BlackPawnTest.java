@@ -2,9 +2,9 @@ package chess.domain.piece;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import chess.domain.board.Direction;
-import chess.domain.board.Route;
-import chess.domain.board.SquareState;
+import chess.domain.game.board.Direction;
+import chess.domain.game.board.Route;
+import chess.domain.game.board.SquareState;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +18,7 @@ class BlackPawnTest {
 
     @BeforeEach
     void beforeEach() {
-        BLACK_PAWN = new BlackPawn();
+        BLACK_PAWN = new BlackPawn(false);
     }
 
     @DisplayName("폰은 한 방향으로만 이동할 수 있다.")

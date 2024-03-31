@@ -1,6 +1,7 @@
 package chess.domain.piece;
 
-import chess.domain.board.Route;
+import chess.domain.game.board.Route;
+import java.util.Objects;
 
 public abstract class Piece {
     private final Color color;
@@ -21,7 +22,28 @@ public abstract class Piece {
         return this.color == other.color;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Piece piece = (Piece) o;
+        return color == piece.color && pieceType == piece.pieceType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color, pieceType);
+    }
+
     public PieceType getPieceType() {
         return pieceType;
+    }
+
+    public Color getColor() {
+        return color;
     }
 }

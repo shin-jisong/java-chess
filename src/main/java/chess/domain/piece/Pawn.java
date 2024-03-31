@@ -1,16 +1,17 @@
 package chess.domain.piece;
 
-import chess.domain.board.Route;
+import chess.domain.game.board.Route;
 
 public abstract class Pawn extends Piece {
     private static final int INIT_MOVE_DISTANCE = 2;
     private static final int NORMAL_MOVE_DISTANCE = 1;
     private static final int ONE_DIRECTION = 1;
 
-    private boolean moved = false;
+    private boolean isMoved;
 
-    protected Pawn(Color color) {
+    protected Pawn(Color color, boolean isMoved) {
         super(color, PieceType.PAWN);
+        this.isMoved = isMoved;
     }
 
     abstract boolean isBackward(Route route);
@@ -37,7 +38,7 @@ public abstract class Pawn extends Piece {
 
     private void checkMoved(boolean movable) {
         if (movable) {
-            moved = true;
+            isMoved = true;
         }
     }
 
@@ -49,6 +50,6 @@ public abstract class Pawn extends Piece {
     }
 
     private boolean isFirstMove() {
-        return !moved;
+        return !isMoved;
     }
 }

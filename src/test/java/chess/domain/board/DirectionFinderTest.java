@@ -3,6 +3,8 @@ package chess.domain.board;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
+import chess.domain.game.board.Direction;
+import chess.domain.game.board.DirectionFinder;
 import chess.domain.location.Column;
 import chess.domain.location.Location;
 import chess.domain.location.Row;

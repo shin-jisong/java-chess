@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS game;
+
+CREATE TABLE game
+(
+    game_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    turn    VARCHAR(10) NOT NULL
+);

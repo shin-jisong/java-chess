@@ -1,6 +1,6 @@
 package chess.domain.location;
 
-import chess.domain.board.Direction;
+import chess.domain.game.board.Direction;
 import java.util.Arrays;
 import java.util.List;
 
@@ -62,5 +62,9 @@ public enum Row {
 
     public int calculateDistance(Row other) {
         return other.rank - this.rank;
+    }
+
+    public int getRank() {
+        return rank;
     }
 }

@@ -1,15 +1,14 @@
 package chess.domain.location;
 
-import chess.domain.board.Direction;
+import chess.domain.game.board.Direction;
 import java.util.Objects;
 
 public class Location {
+    public static final int COLUMN_INPUT_INDEX = 0;
+    public static final int ROW_INPUT_INDEX = 1;
     private static final IllegalArgumentException WRONG_LOCATION_INPUT_EXCEPTION
             = new IllegalArgumentException("잘못된 위치 입력입니다.");
     private static final int LOCATION_INPUT_LENGTH = 2;
-    public static final int COLUMN_INPUT_INDEX = 0;
-    public static final int ROW_INPUT_INDEX = 1;
-
     private final Column column;
     private final Row row;
 
@@ -29,6 +28,15 @@ public class Location {
         }
     }
 
+    private static void validateInput(String input) {
+        if (input == null || input.isBlank()) {
+            throw WRONG_LOCATION_INPUT_EXCEPTION;
+        }
+        if (input.length() != LOCATION_INPUT_LENGTH) {
+            throw WRONG_LOCATION_INPUT_EXCEPTION;
+        }
+    }
+
     public Location move(Direction direction) {
         Column movedColumn = this.column.move(direction);
         Row movedRow = this.row.move(direction);
@@ -43,13 +51,16 @@ public class Location {
         return this.column.calculateDistance(target.column);
     }
 
-    private static void validateInput(String input) {
-        if (input == null || input.isBlank()) {
-            throw WRONG_LOCATION_INPUT_EXCEPTION;
-        }
-        if (input.length() != LOCATION_INPUT_LENGTH) {
-            throw WRONG_LOCATION_INPUT_EXCEPTION;
-        }
+    public Column getColumn() {
+        return column;
+    }
+
+    public Row getRow() {
+        return row;
+    }
+
+    public String toString() {
+        return column.name() + Integer.toString(row.getRank());
     }
 
     @Override

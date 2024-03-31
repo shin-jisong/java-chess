@@ -1,18 +1,23 @@
 package chess.controller;
 
-import chess.domain.board.Board;
+import chess.db.ChessDBConnector;
+import chess.db.ChessDBService;
+import chess.domain.game.Game;
+import chess.domain.game.GameStatus;
+import chess.domain.game.MoveCommand;
+import chess.domain.game.Score;
 import chess.view.InputView;
-import chess.view.MoveCommand;
 import chess.view.OutputView;
 
 public class GameController {
-    private static final InputView inputView = new InputView();
-    private static final OutputView outputView = new OutputView();
+    private static final InputView INPUT_VIEW = new InputView();
+    private static final OutputView OUTPUT_VIEW = new OutputView();
+    private static final ChessDBService DB_SERVICE = new ChessDBService(new ChessDBConnector());
 
-    private Board board = null;
+    private Game game = null;
 
     public void run() {
-        outputView.printGameStart();
+        OUTPUT_VIEW.printGameStart();
         proceed();
     }
 
@@ -20,17 +25,33 @@ public class GameController {
         try {
             play();
         } catch (RuntimeException exception) {
-            outputView.printException(exception);
+            OUTPUT_VIEW.printException(exception);
             proceed();
         }
     }
 
     private void play() {
-        String command = inputView.readCommand();
-        while (!InputView.END.equalsIgnoreCase(command)) {
+        String command = INPUT_VIEW.readCommand();
+        while (!InputView.END.equalsIgnoreCase(command) && !isBoardFinish()) {
             playTurn(command);
-            command = inputView.readCommand();
+            command = INPUT_VIEW.readCommand();
         }
+        checkSaveGame();
+    }
+
+    private void checkSaveGame() {
+        if (game != null && !game.isFinish()) {
+            saveGameOrNot();
+        }
+    }
+
+    private void saveGameOrNot() {
+        if (INPUT_VIEW.readFinishSave()) {
+            DB_SERVICE.saveGame(game);
+            OUTPUT_VIEW.printSave();
+            return;
+        }
+        OUTPUT_VIEW.printNotSave();
     }
 
     private void playTurn(String command) {
@@ -38,24 +59,66 @@ public class GameController {
             createBoard();
             return;
         }
+        if (InputView.STATUS.equalsIgnoreCase(command)) {
+            calculateStatus();
+            return;
+        }
         move(command);
     }
 
     private void createBoard() {
-        board = new Board();
-        outputView.printBoard(board.getBoard());
+        findBoardIfExist();
+        OUTPUT_VIEW.printBoard(game.getBoard());
+    }
+
+    private void findBoardIfExist() {
+        if (DB_SERVICE.isLatestGame()) {
+            loadBoardOrNot();
+        }
+        if (game == null) {
+            game = new Game();
+        }
+    }
+
+    private void loadBoardOrNot() {
+        if (INPUT_VIEW.readLoadGame()) {
+            game = DB_SERVICE.loadGame();
+            DB_SERVICE.deleteGame();
+            OUTPUT_VIEW.printLoad();
+            return;
+        }
+        DB_SERVICE.deleteGame();
+        OUTPUT_VIEW.printNotLoad();
+    }
+
+    private void calculateStatus() {
+        checkBoard();
+        Score score = game.calculateScore();
+        OUTPUT_VIEW.printStatus(score);
     }
 
     private void move(String command) {
         checkBoard();
         String[] commands = command.split(InputView.DELIMITER);
         MoveCommand moveCommand = new MoveCommand(commands[1], commands[2]);
-        board.tryMove(moveCommand);
-        outputView.printBoard(board.getBoard());
+        GameStatus gameStatus = game.proceedTurn(moveCommand);
+        OUTPUT_VIEW.printBoard(game.getBoard());
+        checkFinish(gameStatus);
+    }
+
+    private boolean isBoardFinish() {
+        return game != null && game.isFinish();
+    }
+
+    private void checkFinish(GameStatus gameStatus) {
+        if (gameStatus.equals(GameStatus.IN_PROGRESS)) {
+            return;
+        }
+        OUTPUT_VIEW.printFinish(gameStatus);
     }
 
     private void checkBoard() {
-        if (board == null) {
+        if (game == null) {
             throw new IllegalStateException("아직 게임이 시작되지 않았습니다.");
         }
     }

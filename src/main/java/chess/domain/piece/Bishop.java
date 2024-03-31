@@ -1,6 +1,6 @@
 package chess.domain.piece;
 
-import chess.domain.board.Route;
+import chess.domain.game.board.Route;
 
 public class Bishop extends Piece {
     public Bishop(Color color) {

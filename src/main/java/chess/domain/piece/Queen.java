@@ -1,6 +1,6 @@
 package chess.domain.piece;
 
-import chess.domain.board.Route;
+import chess.domain.game.board.Route;
 
 public class Queen extends Piece {
     private static final int ONE_DIRECTION = 1;
